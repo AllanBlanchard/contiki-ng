@@ -51,6 +51,11 @@
 #else
 #define PRINTF(...)
 #endif
+
+#ifdef __FRAMAC__
+typedef char *caddr_t ;
+#endif
+
 /*---------------------------------------------------------------------------*/
 /**
  * \brief Enlarges the allocated heap space
