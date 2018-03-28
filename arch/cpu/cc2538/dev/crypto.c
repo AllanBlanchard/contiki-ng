@@ -76,7 +76,11 @@ permit_pm1(void)
 void
 crypto_init(void)
 {
+#ifdef __FRAMAC__
+  int i;
+#else
   volatile int i;
+#endif
 
   lpm_register_peripheral(permit_pm1);
 

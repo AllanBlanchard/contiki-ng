@@ -1361,6 +1361,45 @@ typedef struct
  */
 
 /* Memory mapping of Cortex-M3 Hardware */
+
+#ifdef __FRAMAC__
+   struct NVIC_Type;
+
+   static SCnSCB_Type    scs_d;
+   static ITM_Type       itm_d;
+   static DWT_Type       dwt_d;
+   static TPI_Type       tpi_d;
+   static CoreDebug_Type cdbg_d;
+   static SysTick_Type   syst_d;
+   static SCB_Type       scb_d;
+   static NVIC_Type      nvic_d;
+
+
+#define SCS_BASE            (&scs_d)                    /*!< System Control Space Base Address */
+#define ITM_BASE            (&itm_d)                    /*!< ITM Base Address */
+#define DWT_BASE            (&dwt_d)                    /*!< DWT Base Address */
+#define TPI_BASE            (&tpi_d)                    /*!< TPI Base Address */
+#define CoreDebug_BASE      (&cdbg_d)                   /*!< Core Debug Base Address */
+#define SysTick_BASE        (&syst_d)                   /*!< SysTick Base Address */
+#define NVIC_BASE           (&nvic_d)                   /*!< NVIC Base Address */
+#define SCB_BASE            (&scb_d)                    /*!< System Control Block Base Address */
+
+#define SCnSCB              ((SCnSCB_Type    *)     SCS_BASE      )   /*!< System control Register not in SCB */
+#define SCB                 ((SCB_Type       *)     SCB_BASE      )   /*!< SCB configuration struct */
+#define SysTick             ((SysTick_Type   *)     SysTick_BASE  )   /*!< SysTick configuration struct */
+#define NVIC                ((NVIC_Type      *)     NVIC_BASE     )   /*!< NVIC configuration struct */
+#define ITM                 ((ITM_Type       *)     ITM_BASE      )   /*!< ITM configuration struct */
+#define DWT                 ((DWT_Type       *)     DWT_BASE      )   /*!< DWT configuration struct */
+#define TPI                 ((TPI_Type       *)     TPI_BASE      )   /*!< TPI configuration struct */
+#define CoreDebug           ((CoreDebug_Type *)     CoreDebug_BASE)   /*!< Core Debug configuration struct */
+
+#if (__MPU_PRESENT == 1U)
+  #define MPU_BASE          (SCS_BASE +  0x0D90UL)                    /*!< Memory Protection Unit */
+  #define MPU               ((MPU_Type       *)     MPU_BASE      )   /*!< Memory Protection Unit */
+#endif
+
+#else
+
 #define SCS_BASE            (0xE000E000UL)                            /*!< System Control Space Base Address */
 #define ITM_BASE            (0xE0000000UL)                            /*!< ITM Base Address */
 #define DWT_BASE            (0xE0001000UL)                            /*!< DWT Base Address */
@@ -1384,6 +1423,7 @@ typedef struct
   #define MPU               ((MPU_Type       *)     MPU_BASE      )   /*!< Memory Protection Unit */
 #endif
 
+#endif
 /*@} */
 
 

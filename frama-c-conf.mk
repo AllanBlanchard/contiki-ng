@@ -11,10 +11,8 @@ CPPFLAGS += -D__ARM_ARCH=7
 
 CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
 
-# include $(CONTIKI)/arch/cpu/arm/cortex-m/CMSIS/core_cm3.frama-c.mk
-# include $(CONTIKI)/arch/cpu/cc2538/cc2538_cm3.frama-c.mk
-
-FCFLAGS += $(VALID_ADDRS)
+# FCFLAGS += -no-frama-c-stdlib
+FCFLAGS += -kernel-warn-feedback "CERT:MSC:38"
 
 # Does not work :/ 
 # SLEVEL	  = 	-slevel=500

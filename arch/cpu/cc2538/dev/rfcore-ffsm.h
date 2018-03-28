@@ -41,6 +41,35 @@
 /** \name RFCORE_FFSM register offsets
  * @{
  */
+#ifdef __FRAMAC__
+
+static uint32_t fc_rfcore_ffsm[22];
+
+#define RFCORE_FFSM_SRCRESMASK0     (&fc_rfcore_ffsm[ 0]) /**< Src addr matching result */
+#define RFCORE_FFSM_SRCRESMASK1     (&fc_rfcore_ffsm[ 1]) /**< Src addr matching result */
+#define RFCORE_FFSM_SRCRESMASK2     (&fc_rfcore_ffsm[ 2]) /**< Src addr matching result */
+#define RFCORE_FFSM_SRCRESINDEX     (&fc_rfcore_ffsm[ 3]) /**< Src addr matching result */
+#define RFCORE_FFSM_SRCEXTPENDEN0   (&fc_rfcore_ffsm[ 4]) /**< Src addr matching control */
+#define RFCORE_FFSM_SRCEXTPENDEN1   (&fc_rfcore_ffsm[ 5]) /**< Src addr matching control */
+#define RFCORE_FFSM_SRCEXTPENDEN2   (&fc_rfcore_ffsm[ 6]) /**< Src addr matching control */
+#define RFCORE_FFSM_SRCSHORTPENDEN0 (&fc_rfcore_ffsm[ 7]) /**< Src addr matching control */
+#define RFCORE_FFSM_SRCSHORTPENDEN1 (&fc_rfcore_ffsm[ 8]) /**< Src addr matching control */
+#define RFCORE_FFSM_SRCSHORTPENDEN2 (&fc_rfcore_ffsm[ 9]) /**< Src addr matching control */
+#define RFCORE_FFSM_EXT_ADDR0       (&fc_rfcore_ffsm[10]) /**< Local address information */
+#define RFCORE_FFSM_EXT_ADDR1       (&fc_rfcore_ffsm[11]) /**< Local address information */
+#define RFCORE_FFSM_EXT_ADDR2       (&fc_rfcore_ffsm[12]) /**< Local address information */
+#define RFCORE_FFSM_EXT_ADDR3       (&fc_rfcore_ffsm[13]) /**< Local address information */
+#define RFCORE_FFSM_EXT_ADDR4       (&fc_rfcore_ffsm[14]) /**< Local address information */
+#define RFCORE_FFSM_EXT_ADDR5       (&fc_rfcore_ffsm[15]) /**< Local address information */
+#define RFCORE_FFSM_EXT_ADDR6       (&fc_rfcore_ffsm[16]) /**< Local address information */
+#define RFCORE_FFSM_EXT_ADDR7       (&fc_rfcore_ffsm[17]) /**< Local address information */
+#define RFCORE_FFSM_PAN_ID0         (&fc_rfcore_ffsm[18]) /**< Local address information */
+#define RFCORE_FFSM_PAN_ID1         (&fc_rfcore_ffsm[19]) /**< Local address information */
+#define RFCORE_FFSM_SHORT_ADDR0     (&fc_rfcore_ffsm[20]) /**< Local address information */
+#define RFCORE_FFSM_SHORT_ADDR1     (&fc_rfcore_ffsm[21]) /**< Local address information */
+
+#else
+
 #define RFCORE_FFSM_SRCRESMASK0     0x40088580 /**< Src addr matching result */
 #define RFCORE_FFSM_SRCRESMASK1     0x40088584 /**< Src addr matching result */
 #define RFCORE_FFSM_SRCRESMASK2     0x40088588 /**< Src addr matching result */
@@ -63,6 +92,8 @@
 #define RFCORE_FFSM_PAN_ID1         0x400885CC /**< Local address information */
 #define RFCORE_FFSM_SHORT_ADDR0     0x400885D0 /**< Local address information */
 #define RFCORE_FFSM_SHORT_ADDR1     0x400885D4 /**< Local address information */
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name RFCORE_FFSM_SRCRESMASK[0:2] register bit masks

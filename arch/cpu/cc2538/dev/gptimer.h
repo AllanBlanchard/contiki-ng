@@ -46,10 +46,22 @@
 /** \name Base addresses for the GPT register instances
  * @{
  */
+#ifdef __FRAMAC__
+static uint32_t fc_gpts[0x4000];
+
+#define GPT_0_BASE             (&fc_gpts[0x0000]) /**< GPTIMER0 */
+#define GPT_1_BASE             (&fc_gpts[0x1000]) /**< GPTIMER1 */
+#define GPT_2_BASE             (&fc_gpts[0x2000]) /**< GPTIMER2 */
+#define GPT_3_BASE             (&fc_gpts[0x3000]) /**< GPTIMER3 */
+
+#else
+
 #define GPT_0_BASE             0x40030000 /**< GPTIMER0 */
 #define GPT_1_BASE             0x40031000 /**< GPTIMER1 */
 #define GPT_2_BASE             0x40032000 /**< GPTIMER2 */
 #define GPT_3_BASE             0x40033000 /**< GPTIMER3 */
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name GPTIMER Register offset declarations

@@ -339,7 +339,12 @@ upper_layer_chksum(uint8_t proto)
  * upper_layer_len triggers this bug unless it is declared volatile.
  * See https://sourceforge.net/apps/mantisbt/contiki/view.php?id=3
  */
+#ifdef __FRAMAC__
+  /* Removed "volatile" hack to avoid imprecision on volatile */
+  uint16_t upper_layer_len;
+#else
   volatile uint16_t upper_layer_len;
+#endif
   uint16_t sum;
 
   upper_layer_len = uipbuf_get_len_field(UIP_IP_BUF) - uip_ext_len;

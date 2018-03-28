@@ -42,6 +42,23 @@
 /** \name RFCORE_SFR register offsets (MAC Timer)
  * @{
  */
+#ifdef __FRAMAC__
+
+static uint32_t fc_rfcore_sfr_mt[10];
+
+#define RFCORE_SFR_MTCSPCFG     (&fc_rfcore_sfr_mt[0]) /**< MAC Timer event configuration */
+#define RFCORE_SFR_MTCTRL       (&fc_rfcore_sfr_mt[1]) /**< MAC Timer control register */
+#define RFCORE_SFR_MTIRQM       (&fc_rfcore_sfr_mt[2]) /**< MAC Timer interrupt mask */
+#define RFCORE_SFR_MTIRQF       (&fc_rfcore_sfr_mt[3]) /**< MAC Timer interrupt flags */
+#define RFCORE_SFR_MTMSEL       (&fc_rfcore_sfr_mt[4]) /**< MAC Timer multiplex select */
+#define RFCORE_SFR_MTM0         (&fc_rfcore_sfr_mt[5]) /**< MAC Timer MUX register 0 */
+#define RFCORE_SFR_MTM1         (&fc_rfcore_sfr_mt[6]) /**< MAC Timer MUX register 1 */
+#define RFCORE_SFR_MTMOVF2      (&fc_rfcore_sfr_mt[7]) /**< MAC Timer MUX overflow 2 */
+#define RFCORE_SFR_MTMOVF1      (&fc_rfcore_sfr_mt[8]) /**< MAC Timer MUX overflow 1 */
+#define RFCORE_SFR_MTMOVF0      (&fc_rfcore_sfr_mt[9]) /**< MAC Timer MUX overflow 0 */
+
+#else
+
 #define RFCORE_SFR_MTCSPCFG     0x40088800 /**< MAC Timer event configuration */
 #define RFCORE_SFR_MTCTRL       0x40088804 /**< MAC Timer control register */
 #define RFCORE_SFR_MTIRQM       0x40088808 /**< MAC Timer interrupt mask */
@@ -52,16 +69,32 @@
 #define RFCORE_SFR_MTMOVF2      0x4008881C /**< MAC Timer MUX overflow 2 */
 #define RFCORE_SFR_MTMOVF1      0x40088820 /**< MAC Timer MUX overflow 1 */
 #define RFCORE_SFR_MTMOVF0      0x40088824 /**< MAC Timer MUX overflow 0 */
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name RFCORE_SFR register offsets (RF)
  * @{
  */
+#ifdef __FRAMAC__
+
+static uint32_t fc_rfcore_sfr_rf[5];
+
+#define RFCORE_SFR_RFDATA       (&fc_rfcore_sfr_rf[0]) /**< TX/RX FIFO data */
+#define RFCORE_SFR_RFERRF       (&fc_rfcore_sfr_rf[0]) /**< RF error interrupt flags */
+#define RFCORE_SFR_RFIRQF1      (&fc_rfcore_sfr_rf[0]) /**< RF interrupt flags */
+#define RFCORE_SFR_RFIRQF0      (&fc_rfcore_sfr_rf[0]) /**< RF interrupt flags */
+#define RFCORE_SFR_RFST         (&fc_rfcore_sfr_rf[0]) /**< RF CSMA-CA/strobe processor */
+
+#else
+
 #define RFCORE_SFR_RFDATA       0x40088828 /**< TX/RX FIFO data */
 #define RFCORE_SFR_RFERRF       0x4008882C /**< RF error interrupt flags */
 #define RFCORE_SFR_RFIRQF1      0x40088830 /**< RF interrupt flags */
 #define RFCORE_SFR_RFIRQF0      0x40088834 /**< RF interrupt flags */
 #define RFCORE_SFR_RFST         0x40088838 /**< RF CSMA-CA/strobe processor */
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name RFCORE_SFR_MTCSPCFG register bit masks

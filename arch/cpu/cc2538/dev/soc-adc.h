@@ -46,6 +46,22 @@
 /** \name ADC and RNG Register offset declarations
  * @{
  */
+
+#ifdef __FRAMAC__
+
+static uint32_t fc_soc_adc[8];
+
+#define SOC_ADC_ADCCON1         (&fc_soc_adc[0]) /**< ADC Control 1 */
+#define SOC_ADC_ADCCON2         (&fc_soc_adc[0]) /**< ADC Control 2 */
+#define SOC_ADC_ADCCON3         (&fc_soc_adc[0]) /**< ADC Control 3 */
+#define SOC_ADC_ADCL            (&fc_soc_adc[0]) /**< ADC Result, least significant part */
+#define SOC_ADC_ADCH            (&fc_soc_adc[0]) /**< ADC Result, most significant part */
+#define SOC_ADC_RNDL            (&fc_soc_adc[0]) /**< RNG low byte */
+#define SOC_ADC_RNDH            (&fc_soc_adc[0]) /**< RNG high byte */
+#define SOC_ADC_CMPCTL          (&fc_soc_adc[0]) /**< Analog comparator control and status */
+
+#else
+
 #define SOC_ADC_ADCCON1         0x400D7000 /**< ADC Control 1 */
 #define SOC_ADC_ADCCON2         0x400D7004 /**< ADC Control 2 */
 #define SOC_ADC_ADCCON3         0x400D7008 /**< ADC Control 3 */
@@ -54,6 +70,9 @@
 #define SOC_ADC_RNDL            0x400D7014 /**< RNG low byte */
 #define SOC_ADC_RNDH            0x400D7018 /**< RNG high byte */
 #define SOC_ADC_CMPCTL          0x400D7024 /**< Analog comparator control and status */
+
+#endif
+
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name SOC_ADC_ADCCON1 register bit masks

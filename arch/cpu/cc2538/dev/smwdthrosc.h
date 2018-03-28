@@ -47,6 +47,25 @@
 /** \name ST and WDT Register offset declarations
  * @{
  */
+#ifdef __FRAMAC__
+/* double check this */
+static uint32_t fc_smwdthrosc[26];
+
+#define SMWDTHROSC_WDCTL        (&fc_smwdthrosc[   0]) /**< Watchdog Control */
+#define SMWDTHROSC_ST0          (&fc_smwdthrosc[0x10]) /**< ST count/compare value 0 */
+#define SMWDTHROSC_ST1          (&fc_smwdthrosc[0x11]) /**< ST count/compare value 1 */
+#define SMWDTHROSC_ST2          (&fc_smwdthrosc[0x12]) /**< ST count/compare value 2 */
+#define SMWDTHROSC_ST3          (&fc_smwdthrosc[0x13]) /**< ST count/compare value 3 */
+#define SMWDTHROSC_STLOAD       (&fc_smwdthrosc[0x14]) /**< Compare value load status */
+#define SMWDTHROSC_STCC         (&fc_smwdthrosc[0x15]) /**< ST capture control */
+#define SMWDTHROSC_STCS         (&fc_smwdthrosc[0x16]) /**< ST capture status */
+#define SMWDTHROSC_STCV0        (&fc_smwdthrosc[0x17]) /**< ST capture value 0 */
+#define SMWDTHROSC_STCV1        (&fc_smwdthrosc[0x18]) /**< ST capture value 1 */
+#define SMWDTHROSC_STCV2        (&fc_smwdthrosc[0x19]) /**< ST capture value 2 */
+#define SMWDTHROSC_STCV3        (&fc_smwdthrosc[0x20]) /**< ST capture value 3 */
+
+#else
+
 #define SMWDTHROSC_WDCTL        0x400D5000 /**< Watchdog Control */
 #define SMWDTHROSC_ST0          0x400D5040 /**< ST count/compare value 0 */
 #define SMWDTHROSC_ST1          0x400D5044 /**< ST count/compare value 1 */
@@ -59,6 +78,8 @@
 #define SMWDTHROSC_STCV1        0x400D5060 /**< ST capture value 1 */
 #define SMWDTHROSC_STCV2        0x400D5064 /**< ST capture value 2 */
 #define SMWDTHROSC_STCV3        0x400D5068 /**< ST capture value 3 */
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name SMWDTHROSC_WDCTL register bit masks
