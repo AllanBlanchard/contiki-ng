@@ -51,6 +51,8 @@ frama-c.eva: ${SUB}_${TARGET}.eva
 	@
 frama-c.slevel.eva: ${SUB}_${TARGET}.slevel.eva
 	@
+frama-c.eva.loop: ${SUB}_${TARGET}.eva.loop
+	@
 frama-c.eva.gui: ${SUB}_${TARGET}.eva.gui
 	@
 
