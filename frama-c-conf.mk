@@ -4,10 +4,8 @@ include analysis.mk
 FRAMA_C_PATH=$(shell frama-c -print-share-path)
 FRAMA_C_SCRIPTS_PATH=$(FRAMA_C_PATH)/analysis-scripts
 
-CPPFLAGS=-I/usr/lib/arm-none-eabi/include
 CPPFLAGS += ${filter -D% -I%, $(CFLAGS)}
-CPPFLAGS += -DAUTOSTART_ENABLE
-CPPFLAGS += -D__ARM_ARCH=7
+#CPPFLAGS += -DAUTOSTART_ENABLE
 
 CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
 
@@ -58,6 +56,5 @@ frama-c.eva.gui: ${SUB}_${TARGET}.eva.gui
 
 ${SUB}_${TARGET}.parse:		$(CONTIKI_SOURCEFILES)\
 				$(PROJECT_SOURCEFILES)\
-				$(FC_PROJECT_FILES)\
-				$(CONTIKI)/arch/cpu/cc2538/startup-gcc.c
+				$(FC_PROJECT_FILES)
 #######################################################################
