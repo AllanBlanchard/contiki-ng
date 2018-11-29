@@ -12,7 +12,7 @@ CPPFLAGS += -D__ARM_ARCH=7
 CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
 
 # FCFLAGS += -no-frama-c-stdlib
-FCFLAGS += -kernel-warn-feedback "CERT:MSC:38"
+#FCFLAGS += -kernel-warn-feedback "CERT:MSC:38"
 
 # Does not work :/ 
 # SLEVEL	  = 	-slevel=500
