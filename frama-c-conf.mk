@@ -1,5 +1,4 @@
 # For Frama-C #########################################################
-include analysis.mk
 
 FRAMA_C_PATH=$(shell frama-c -print-share-path)
 FRAMA_C_SCRIPTS_PATH=$(FRAMA_C_PATH)/analysis-scripts
@@ -9,7 +8,7 @@ CPPFLAGS += ${filter -D% -I%, $(CFLAGS)}
 
 CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
 
-# FCFLAGS += -no-frama-c-stdlib
+FCFLAGS += -no-frama-c-stdlib -machdep gcc_x86_64 -c11 -cpp-frama-c-compliant
 #FCFLAGS += -kernel-warn-feedback "CERT:MSC:38"
 
 # Does not work :/ 
