@@ -1,6 +1,6 @@
 include analysis.mk
 FRAMAC     ?= frama-c
-FCCOMMONFLAGS += -machdep gcc_x86_64
+FCCOMMONFLAGS += -no-frama-c-stdlib -c11 -cpp-frama-c-compliant -variadic-no-translation -machdep gcc_x86_64
 # Frama-C PARSE #########################################################
 CPPFLAGS=
 CPPFLAGS += ${filter -D% -I%, $(CFLAGS)}
@@ -27,9 +27,9 @@ $(TARGET).parse: $(CONTIKI_SOURCEFILES)\
 
 # Frama-C EACSL #########################################################
 eacsl:
-	$(FRAMAC) -no-frama-c-stdlib -c11 -cpp-frama-c-compliant -variadic-no-translation -e-acsl -print -ocode native.parse/framac2.c native.parse/framac.c
+	$(FRAMAC) $(FCCOMMONFLAGS) -e-acsl -print -ocode native.parse/framac2.c native.parse/framac.c
 #######################################################################
 
 test:
 	@mkdir -p native.parse/
-	$(FRAMAC) -no-frama-c-stdlib -c11 -cpp-frama-c-compliant -variadic-no-translation -machdep gcc_x86_64 -e-acsl-prepare -rte  -cpp-extra-args="-DCONTIKI=1 -DCONTIKI_TARGET_NATIVE=1 -DCONTIKI_TARGET_STRING=\\\"native\\\" -I/usr/local/include -DMAC_CONF_WITH_NULLMAC=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1 -I. -I../../arch/platform/native/. -I../../arch/platform/native/dev -I../../arch -I../../arch/cpu/native/. -I../../arch/cpu/native/net -I../../arch/cpu/native/dev -I../../os -I../../os/sys -I../../os/dev -I../../os/lib -I../../os/services -I../../os -I../../os/net -I../../os/net/mac -I../../os/net/mac/framer -I../../os/net/routing -I../../os/storage -I../../os/net/mac/nullmac -I../../os/net/ipv6 -I../../os/net/routing/rpl-lite -I../../arch/platform/native/ -I../.. -DCONTIKI_VERSION_STRING=\\\"Contiki-NG-release/v4.2-135-g676437693-dirty\\\""  ../../os/net/ipv6/uip6.c -save native.parse/framac.save -print -ocode native.parse/framac.c -then -no-print
+	$(FRAMAC) $(FCCOMMONFLAGS) -no-warn-invalid-bool -e-acsl-prepare -rte -cpp-extra-args="-DCONTIKI=1 -DCONTIKI_TARGET_NATIVE=1 -DCONTIKI_TARGET_STRING=\\\"native\\\" -I/usr/local/include -DMAC_CONF_WITH_NULLMAC=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1 -I. -I../../arch/platform/native/. -I../../arch/platform/native/dev -I../../arch -I../../arch/cpu/native/. -I../../arch/cpu/native/net -I../../arch/cpu/native/dev -I../../os -I../../os/sys -I../../os/dev -I../../os/lib -I../../os/services -I../../os -I../../os/net -I../../os/net/mac -I../../os/net/mac/framer -I../../os/net/routing -I../../os/storage -I../../os/net/mac/nullmac -I../../os/net/ipv6 -I../../os/net/routing/rpl-lite -I../../arch/platform/native/ -I../.. -DCONTIKI_VERSION_STRING=\\\"Contiki-NG-release/v4.2-135-g676437693-dirty\\\""  ../../os/net/ipv6/uip6.c -save native.parse/framac.save -print -ocode native.parse/framac.c -then -no-print
