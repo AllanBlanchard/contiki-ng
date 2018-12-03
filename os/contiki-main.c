@@ -96,7 +96,7 @@ main(void)
   netstack_init();
   node_id_init();
 
-  LOG_INFO("Starting " CONTIKI_VERSION_STRING "\n");
+//  LOG_INFO("Starting " CONTIKI_VERSION_STRING "\n");
   LOG_INFO("- Routing: %s\n", NETSTACK_ROUTING.name);
   LOG_INFO("- Net: %s\n", NETSTACK_NETWORK.name);
   LOG_INFO("- MAC: %s\n", NETSTACK_MAC.name);
