@@ -8,9 +8,6 @@ CPPFLAGS += ${filter -D% -I%, $(CFLAGS)}
 #CPPFLAGS += -DAUTOSTART_ENABLE
 CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
 
-FCPARSEFLAGS += -no-frama-c-stdlib -c11 -cpp-frama-c-compliant -variadic-no-translation $(FCCOMMONFLAGS) -e-acsl-prepare -rte # -then -e-acsl
-#FCPARSEFLAGS += -kernel-warn-feedback "CERT:MSC:38"
-
 %.parse: SOURCES = $(filter-out %/command,$^)
 %.parse: PARSE = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
 %.parse:
