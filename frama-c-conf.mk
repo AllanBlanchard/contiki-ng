@@ -8,7 +8,8 @@ CPPFLAGS += ${filter -D% -I%, $(CFLAGS)}
 #CPPFLAGS += -DAUTOSTART_ENABLE
 CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
 
-%.parse: SOURCES = $(filter-out %/command,$^)
+include files.mk
+%.parse: SOURCES = $(SRCFILES)
 %.parse: PARSE = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
 %.parse:
 	@mkdir -p $@
