@@ -25,7 +25,7 @@ $(TARGET).parse: $(CONTIKI_SOURCEFILES)\
 				 $(PROJECT_SOURCEFILES)\
 				 $(FC_PROJECT_FILES)
 
-%.eacsl: EACSLCMD = $(FRAMAC) $(FCCOMMONFLAGS) -e-acsl -print -ocode $@/framac.c native.parse/framac.c
+%.eacsl: EACSLCMD = $(FRAMAC) $(FCCOMMONFLAGS) native.parse/framac.c -e-acsl -then-last -print -ocode $@/framac.c
 
 eacsl: parse $(TARGET).eacsl
 
