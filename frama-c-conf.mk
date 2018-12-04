@@ -12,7 +12,7 @@ FCPARSEFLAGS += -no-frama-c-stdlib -c11 -cpp-frama-c-compliant -variadic-no-tran
 #FCPARSEFLAGS += -kernel-warn-feedback "CERT:MSC:38"
 
 %.parse: SOURCES = $(filter-out %/command,$^)
-%.parse: PARSE = $(FRAMAC) $(FCPARSEFLAGS) -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
+%.parse: PARSE = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
 %.parse:
 	@mkdir -p $@
 	$(PARSE)
@@ -25,13 +25,12 @@ $(TARGET).parse: $(CONTIKI_SOURCEFILES)\
 				 $(PROJECT_SOURCEFILES)\
 				 $(FC_PROJECT_FILES)
 
-# Frama-C EACSL #########################################################
-eacsl:
-	$(FRAMAC) $(FCCOMMONFLAGS) -e-acsl -print -ocode native.parse/framac2.c native.parse/framac.c
-#######################################################################
+%.eacsl: EACSLCMD = $(FRAMAC) $(FCCOMMONFLAGS) -e-acsl -print -ocode $@/framac.c native.parse/framac.c
 
-include files.mk
+eacsl: parse $(TARGET).eacsl
 
-test:
-	@mkdir -p native.parse/
-	$(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte -cpp-extra-args="-DCONTIKI=1 -DCONTIKI_TARGET_NATIVE=1 -DCONTIKI_TARGET_STRING=\"native\" -I/usr/local/include -DMAC_CONF_WITH_NULLMAC=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1 -I. -I../../arch/platform/native/. -I../../arch/platform/native/dev -I../../arch -I../../arch/cpu/native/. -I../../arch/cpu/native/net -I../../arch/cpu/native/dev -I../../os -I../../os/sys -I../../os/dev -I../../os/lib -I../../os/services -I../../os -I../../os/net -I../../os/net/mac -I../../os/net/mac/framer -I../../os/net/routing -I../../os/storage -I../../os/net/mac/nullmac -I../../os/net/ipv6 -I../../os/net/routing/rpl-lite -I../../arch/platform/native/ -I../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-141-g44ca67bd0-dirty\"" $(SRCFILES) -save native.parse/framac.save -print -ocode native.parse/framac.c -then -no-print
+$(TARGET).eacsl:
+	@mkdir -p $@
+	$(EACSLCMD)
+	@touch $@ # Update timestamp and prevents remake if nothing changes
+	@echo $(EACSLCMD)
