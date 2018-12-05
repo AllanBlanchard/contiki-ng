@@ -275,6 +275,16 @@ platform_init_stage_three()
   setvbuf(stdout, (char *)NULL, _IONBF, 0);
 }
 /*---------------------------------------------------------------------------*/
+#ifdef FD_ZERO
+#undef FD_ZERO
+#define FD_ZERO(set) \
+    do {									      \
+        unsigned int __i;							      \
+        fd_set *__arr = (set);						      \
+        for (__i = 0; __i < sizeof (fd_set) / sizeof (__fd_mask); ++__i)	      \
+        __FDS_BITS (__arr)[__i] = 0;					      \
+    } while (0)
+#endif
 void
 platform_main_loop()
 {
