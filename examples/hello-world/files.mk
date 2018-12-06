@@ -24,19 +24,15 @@ SRCFILES:= \
 	   ../../os/sys/process.c \
 	   ../../os/sys/rtimer.c \
 	   ../../os/sys/timer.c \
-	   ../../os/sys/stack-check.c \
 	   ../../os/dev/button-hal.c \
 	   ../../os/dev/serial-line.c \
-	   ../../os/dev/spi.c \
 	   ../../os/dev/leds.c \
-	   ../../os/dev/slip.c \
 	   ../../os/dev/nullradio.c \
 	   ../../os/dev/gpio-hal.c \
 	   ../../os/lib/dbl-circ-list.c \
 	   ../../os/lib/crc16.c \
 	   ../../os/lib/ifft.c \
 	   ../../os/lib/ccm-star.c \
-	   ../../os/lib/sensors.c \
 	   ../../os/lib/dbl-list.c \
 	   ../../os/lib/ringbufindex.c \
 	   ../../os/lib/list.c \
@@ -67,7 +63,6 @@ SRCFILES:= \
 	   ../../os/net/ipv6/uip-sr.c \
 	   ../../os/net/ipv6/uip-ds6.c \
 	   ../../os/net/ipv6/uip-packetqueue.c \
-	   ../../os/net/ipv6/tcp-socket.c \
 	   ../../os/net/ipv6/ip64-addr.c \
 	   ../../os/net/ipv6/uip-udp-packet.c \
 	   ../../os/net/ipv6/uip-ds6-route.c \
