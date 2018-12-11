@@ -1,4 +1,5 @@
 include analysis.mk
+# Frama-C COMMON #########################################################
 FRAMAC     ?= frama-c
 FCCOMMONFLAGS += -no-frama-c-stdlib -c11 -cpp-frama-c-compliant -variadic-no-translation -machdep gcc_x86_64
 # Frama-C PARSE #########################################################
@@ -7,7 +8,8 @@ CPPFLAGS += ${filter -D% -I%, $(CFLAGS)}
 #CPPFLAGS +=-I /usr/lib/gcc/x86_64-linux-gnu/8/include -I /usr/local/include -I /usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I /usr/include/x86_64-linux-gnu -I /usr/include
 #CPPFLAGS += -DAUTOSTART_ENABLE
 CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
-
+# Frama-C EACSK #########################################################
+FULLMMODEL=-e-acsl-full-mmodel
 include files.mk
 %.parse: SOURCES = $(SRCFILES)
 %.parse: PARSE = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
@@ -23,7 +25,7 @@ $(TARGET).parse: $(CONTIKI_SOURCEFILES)\
 				 $(PROJECT_SOURCEFILES)\
 				 $(FC_PROJECT_FILES)
 
-%.eacsl: EACSLCMD = $(FRAMAC) $(FCCOMMONFLAGS) native.parse/framac.c -e-acsl -then-last -print -ocode $@/framac.c
+%.eacsl: EACSLCMD = $(FRAMAC) $(FCCOMMONFLAGS) native.parse/framac.c -e-acsl $(FULLMMODEL) -then-last -print -ocode $@/framac.c
 
 eacsl: parse $(TARGET).eacsl
 
