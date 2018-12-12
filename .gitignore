@@ -69,4 +69,5 @@ cpu/x86/uefi/Makefile.uefi
 cpu/x86/uefi/edk2
 
 native.parse/
+native.rte/
 native.eacsl/

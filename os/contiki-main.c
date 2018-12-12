@@ -49,7 +49,9 @@
 #include "dev/watchdog.h"
 
 #include "net/queuebuf.h"
+#if BUILD_WITH_COAP
 #include "net/app-layer/coap/coap-engine.h"
+#endif
 #include "services/rpl-border-router/rpl-border-router.h"
 #include "services/orchestra/orchestra.h"
 #include "services/shell/serial-shell.h"
