@@ -1223,7 +1223,7 @@ uip_process(uint8_t flag)
        !uip_is_addr_unspecified(&UIP_IP_BUF->srcipaddr) &&
        !uip_is_addr_loopback(&UIP_IP_BUF->destipaddr)) {
 
-      if(!uip_check_mtu() || !uip_update_ttl()) {
+      if(!(uip_check_mtu() && uip_update_ttl())) {
         /* Send ICMPv6 error, prepared by the function that just returned false */
         goto send;
       }
@@ -1341,7 +1341,7 @@ uip_process(uint8_t flag)
           /* The MTU and TTL were not checked and updated yet, because with
            * a routing header, the IPv6 destination address was set to us
            * even though we act only as forwarder. Check MTU and TTL now */
-          if(!uip_check_mtu() || !uip_update_ttl()) {
+          if(!(uip_check_mtu() && uip_update_ttl())) {
             /* Send ICMPv6 error, prepared by the function that just returned false */
             goto send;
           }

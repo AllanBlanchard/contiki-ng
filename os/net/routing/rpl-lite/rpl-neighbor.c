@@ -357,7 +357,7 @@ best_parent(int fresh_only)
   /* Search for the best parent according to the OF */
   for(nbr = nbr_table_head(rpl_neighbors); nbr != NULL; nbr = nbr_table_next(rpl_neighbors, nbr)) {
 
-    if(!acceptable_rank(nbr->rank) || !curr_instance.of->nbr_is_acceptable_parent(nbr)) {
+    if(!(acceptable_rank(nbr->rank) && curr_instance.of->nbr_is_acceptable_parent(nbr))) {
       /* Exclude neighbors with a rank that is not acceptable) */
       continue;
     }
