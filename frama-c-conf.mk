@@ -11,8 +11,11 @@ CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
 # Frama-C EACSL #########################################################
 include files.mk
 
+MORERTE = -warn-signed-overflow -warn-unsigned-overflow -warn-signed-downcast
+#MORERTE=-warn-unsigned-downcast
+MORERTE += -rte-div -rte-float-to-int -rte-mem -rte-pointer-call -rte-shift -rte-no-trivial-annotations
 %.rte: SOURCES = $(SRCFILES)
-%.rte: PARSE = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
+%.rte: PARSE = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
 %.rte:
 	@mkdir -p $@
 	$(PARSE)
