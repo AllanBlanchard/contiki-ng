@@ -11,6 +11,7 @@ CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
 # Frama-C EACSL #########################################################
 include files.mk
 
+##############################################################
 MORERTE = -warn-signed-overflow -warn-unsigned-overflow -warn-signed-downcast
 #MORERTE=-warn-unsigned-downcast
 MORERTE += -rte-div -rte-float-to-int -rte-mem -rte-pointer-call -rte-shift -rte-no-trivial-annotations
@@ -28,6 +29,9 @@ $(TARGET).rte: $(CONTIKI_SOURCEFILES)\
 				 $(PROJECT_SOURCEFILES)\
 				 $(FC_PROJECT_FILES)
 
+##############################################################
+
+
 FULLMMODEL=-e-acsl-full-mmodel
 %.eacsl: EACSLCMD = $(FRAMAC) $(FCCOMMONFLAGS) native.rte/framac.c -e-acsl $(FULLMMODEL) -then-last -print -ocode $@/framac.c
 
@@ -38,7 +42,19 @@ $(TARGET).eacsl:
 	$(EACSLCMD)
 	@touch $@ # Update timestamp and prevents remake if nothing changes
 	@echo $(EACSLCMD)
+##############################################################
+%.total: SOURCES = $(SRCFILES)
+%.total: TOTALCMD = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -then -e-acsl $(FULLMMODEL) -then-last -print -ocode $@/framac.c
 
+total: $(TARGET).total
+
+$(TARGET).total:
+	@mkdir -p $@
+	$(TOTALCMD)
+	@touch $@ # Update timestamp and prevents remake if nothing changes
+	@echo $(TOTALCMD)
+
+##############################################################
 parse: $(TARGET).parse
 
 %.parse: SOURCES = $(SRCFILES)

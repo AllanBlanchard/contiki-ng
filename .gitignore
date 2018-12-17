@@ -71,3 +71,4 @@ cpu/x86/uefi/edk2
 native.parse/
 native.rte/
 native.eacsl/
+native.total/
