@@ -72,3 +72,4 @@ native.parse/
 native.rte/
 native.eacsl/
 native.total/
+cooja.parse/
