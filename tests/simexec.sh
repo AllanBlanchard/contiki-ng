@@ -28,6 +28,8 @@ for (( SEED=$BASESEED; SEED<$(($BASESEED+$RUNCOUNT)); SEED++ )); do
 	echo -n "Running test $BASENAME with random Seed $SEED"
 
 	# run simulation
+	echo "java -Xshare:on -jar $CONTIKI/tools/cooja/dist/cooja.jar -nogui=$CSC -contiki=$CONTIKI -random-seed=$SEED"
+    echo "$BASENAME.$SEED.coojalog"
 	java -Xshare:on -jar $CONTIKI/tools/cooja/dist/cooja.jar -nogui=$CSC -contiki=$CONTIKI -random-seed=$SEED > $BASENAME.$SEED.coojalog &
 	JPID=$!
 
