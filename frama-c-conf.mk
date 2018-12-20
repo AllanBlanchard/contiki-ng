@@ -1,20 +1,19 @@
 include analysis.mk
+M ?= 64
 # Frama-C COMMON #########################################################
 FRAMAC     ?= frama-c
-FCCOMMONFLAGS += -no-frama-c-stdlib -c11 -cpp-frama-c-compliant -variadic-no-translation -machdep gcc_x86_64
+FCCOMMONFLAGS += -no-frama-c-stdlib -c11 -cpp-frama-c-compliant -variadic-no-translation -machdep gcc_x86_$(M)
 # Frama-C PARSE #########################################################
 CPPFLAGSTEMPO=
 CPPFLAGSTEMPO += ${filter -D% -I%, $(CFLAGS)}
 CPPFLAGS=$(filter-out -DCLASSNAME=,$(CPPFLAGSTEMPO))
-#CPPFLAGS +=-I /usr/lib/gcc/x86_64-linux-gnu/8/include -I /usr/local/include -I /usr/lib/gcc/x86_64-linux-gnu/8/include-fixed -I /usr/include/x86_64-linux-gnu -I /usr/include
-#CPPFLAGS += -DAUTOSTART_ENABLE
 CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
 # Frama-C EACSL #########################################################
 include files.mk
 
 ##############################################################
-MORERTE = -warn-signed-overflow -warn-unsigned-overflow -warn-signed-downcast
-#MORERTE=-warn-unsigned-downcast
+MORERTE = -warn-signed-overflow -warn-signed-downcast
+#MORERTE=-warn-unsigned-downcast -warn-unsigned-overflow
 MORERTE += -rte-div -rte-float-to-int -rte-mem -rte-pointer-call -rte-shift -rte-no-trivial-annotations
 %.rte: SOURCES = $(SRCFILES)
 %.rte: PARSE = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
@@ -43,9 +42,10 @@ $(TARGET).eacsl:
 	$(EACSLCMD)
 	@touch $@ # Update timestamp and prevents remake if nothing changes
 	@echo $(EACSLCMD)
-	##############################################################
-	%.total: SOURCES = $(SRCFILES)
-	%.total: TOTALCMD = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -then -e-acsl $(FULLMMODEL) -then-last -print -ocode $@/framac.c
+
+##############################################################
+%.total: SOURCES = $(SRCFILES)
+%.total: TOTALCMD = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -then -e-acsl $(FULLMMODEL) -then-last -print -ocode $@/framac.c
 
 total: $(TARGET).total
 
