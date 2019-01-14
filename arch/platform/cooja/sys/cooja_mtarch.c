@@ -112,15 +112,14 @@ void cooja_sw(void)
       "pushq %rbp\n\t"
       "pushq %rbp\n\t");
 #else /* ON_64BIT_ARCH */
-  __asm__ (
-      "pushl %eax\n\t"
-      "pushl %ebx\n\t"
-      "pushl %ecx\n\t"
-      "pushl %edx\n\t"
-      "pushl %esi\n\t"
-      "pushl %edi\n\t"
-      "pushl %ebp\n\t"
-      "pushl %ebp\n\t");
+  __asm__("pushl %%eax\n\t" : );
+  __asm__("pushl %%ebx\n\t" : );
+  __asm__("pushl %%ecx\n\t" : );
+  __asm__("pushl %%edx\n\t" : );
+  __asm__("pushl %%esi\n\t" : );
+  __asm__("pushl %%edi\n\t" : );
+  __asm__("pushl %%ebp\n\t" : );
+  __asm__("pushl %%ebp\n\t" : );
 #endif /* ON_64BIT_ARCH */
 
   /* Switch stack pointer */
@@ -133,11 +132,9 @@ void cooja_sw(void)
   );
 #else /* ON_64BIT_ARCH */
   __asm__ ("movl %0, %%eax\n\t" : : "m" (cooja_running_thread));
-  __asm__ (
-      "movl (%eax), %ebx\n\t"
-      "movl %esp, (%eax)\n\t"
-      "movl %ebx, %esp\n\t"
-  );
+  __asm__("movl (%%eax), %%ebx\n\t" : );
+  __asm__("movl %%esp, (%%eax)\n\t" : );
+  __asm__("movl %%ebx, %%esp\n\t" : );
 #endif /* ON_64BIT_ARCH */
 
   /* Restore previous registers */
@@ -156,18 +153,17 @@ void cooja_sw(void)
       "ret\n\t"
   );
 #else /* ON_64BIT_ARCH */
-  __asm__ (
-      "popl %ebp\n\t"
-      "popl %ebp\n\t"
-      "popl %edi\n\t"
-      "popl %esi\n\t"
-      "popl %edx\n\t"
-      "popl %ecx\n\t"
-      "popl %ebx\n\t"
-      "popl %eax\n\t"
-
-      "leave\n\t"
-      "ret\n\t"
+  __asm__("popl %%ebp\n\t" : );
+  __asm__("popl %%ebp\n\t" : );
+  __asm__("popl %%edi\n\t" : );
+  __asm__("popl %%esi\n\t" : );
+  __asm__("popl %%edx\n\t" : );
+  __asm__("popl %%ecx\n\t" : );
+  __asm__("popl %%ebx\n\t" : );
+  __asm__("popl %%eax\n\t" : );
+  __asm__(
+          "leave\n\t"
+          "ret\n\t"
   );
 #endif /* ON_64BIT_ARCH */
 
