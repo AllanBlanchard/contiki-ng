@@ -36,8 +36,8 @@
 
 #include "lib/ringbufindex.h"
 
-PROCESS(test_process2, "ringbuf-index.c test");
-AUTOSTART_PROCESSES(&test_process2);
+PROCESS(ringbufindex_test_process, "ringbuf-index.c test");
+AUTOSTART_PROCESSES(&ringbufindex_test_process);
 
 static struct ringbufindex ri;
 static const uint8_t ri_size = 2;
@@ -345,7 +345,7 @@ UNIT_TEST(test_ringbufindex_empty)
   UNIT_TEST_END();
 }
 
-PROCESS_THREAD(test_process2, ev, data)
+PROCESS_THREAD(ringbufindex_test_process, ev, data)
 {
   PROCESS_BEGIN();
   printf("Run unit-test\n");
