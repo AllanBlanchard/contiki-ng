@@ -21,6 +21,7 @@ SRCFILES:= \
 	../../../arch/platform/cooja/dev/cooja-radio.c \
 	../../../arch/platform/cooja/dev/eeprom.c \
 	../../../arch/platform/cooja/./slip-arch.c \
+    ../../../arch/platform/cooja/int-master.c \
 	../../../os/lib/random.c \
 	../../../os/lib/sensors.c \
 	../../../os/dev/leds.c \
@@ -39,12 +40,8 @@ SRCFILES:= \
 	../../../os/sys/process.c \
 	../../../os/sys/rtimer.c \
 	../../../os/sys/timer.c \
-	../../../os/sys/stack-check.c \
-	../../../os/dev/button-hal.c \
 	../../../os/dev/serial-line.c \
-	../../../os/dev/spi.c \
 	../../../os/dev/nullradio.c \
-	../../../os/dev/gpio-hal.c \
 	../../../os/lib/dbl-circ-list.c \
 	../../../os/lib/crc16.c \
 	../../../os/lib/ifft.c \
@@ -82,7 +79,6 @@ SRCFILES:= \
 	../../../os/net/ipv6/uip-sr.c \
 	../../../os/net/ipv6/uip-ds6.c \
 	../../../os/net/ipv6/uip-packetqueue.c \
-	../../../os/net/ipv6/tcp-socket.c \
 	../../../os/net/ipv6/ip64-addr.c \
 	../../../os/net/ipv6/uip-udp-packet.c \
 	../../../os/net/ipv6/uip-ds6-route.c \
