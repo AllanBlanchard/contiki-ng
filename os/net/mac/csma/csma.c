@@ -83,9 +83,9 @@ input_packet(void)
     LOG_DBG("ignored ack\n");
   } else if(csma_security_parse_frame() < 0) {
     LOG_ERR("failed to parse %u\n", packetbuf_datalen());
-  } else if(!linkaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER),
-                                         &linkaddr_node_addr) &&
-            !packetbuf_holds_broadcast()) {
+  } else if(!(linkaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_RECEIVER),
+                                         &linkaddr_node_addr) ||
+            packetbuf_holds_broadcast())) {
     LOG_WARN("not for us\n");
   } else if(linkaddr_cmp(packetbuf_addr(PACKETBUF_ADDR_SENDER), &linkaddr_node_addr)) {
     LOG_WARN("frame from ourselves\n");
