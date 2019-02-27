@@ -98,3 +98,32 @@ n: total
 	cp $(RESULT).map build/cooja/
 	cp test-ringbufindex.cooja build/cooja/$(LIBNAME).cooja
 	#rm test-ringbufindex.o
+##############################################################
+RESULT=$(TARGET).parse/$(LIBNAME)
+o: parse
+	@echo $(LIBNAME)
+	gcc -DCONTIKI=1 -DCONTIKI_TARGET_COOJA=1 -DCONTIKI_TARGET_STRING=\"cooja\" -Wno-unused-const-variable -DPROJECT_CONF_PATH=\"project-conf.h\" -I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -DMAC_CONF_WITH_CSMA=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1  -I. -I../../../arch/platform/cooja/. -I../../../arch/platform/cooja/dev -I../../../arch/platform/cooja/lib -I../../../arch/platform/cooja/sys -I../../../arch/platform/cooja/cfs -I../../../arch/platform/cooja/net -I../../../arch -I../../../os/services/unit-test -I../../../os -I../../../os/sys -I../../../os/dev -I../../../os/lib -I../../../os/services -I../../../os -I../../../os/net -I../../../os/net/mac -I../../../os/net/mac/framer -I../../../os/net/routing -I../../../os/storage -I../../../os/net/mac/csma -I../../../os/net/ipv6 -I../../../os/net/routing/rpl-lite -I../../../arch/platform/cooja/ -I../../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-173-ge82159a-dirty\" -MMD -o $(RESULT).o -c $(TARGET).parse/framac.c
+	gcc -DCONTIKI=1 -DCONTIKI_TARGET_COOJA=1 -DCONTIKI_TARGET_STRING=\"cooja\" -Wno-unused-const-variable -DPROJECT_CONF_PATH=\"project-conf.h\" -I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -DMAC_CONF_WITH_CSMA=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1  -I. -I../../../arch/platform/cooja/. -I../../../arch/platform/cooja/dev -I../../../arch/platform/cooja/lib -I../../../arch/platform/cooja/sys -I../../../arch/platform/cooja/cfs -I../../../arch/platform/cooja/net -I../../../arch -I../../../os/services/unit-test -I../../../os -I../../../os/sys -I../../../os/dev -I../../../os/lib -I../../../os/services -I../../../os -I../../../os/net -I../../../os/net/mac -I../../../os/net/mac/framer -I../../../os/net/routing -I../../../os/storage -I../../../os/net/mac/csma -I../../../os/net/ipv6 -I../../../os/net/routing/rpl-lite -I../../../arch/platform/cooja/ -I../../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-173-ge82159a-dirty\" -MMD -o test-ringbufindex.o -c test-ringbufindex.c
+	mkdir -p build/cooja/
+	ar rcf build/cooja/$(LIBNAME).a $(RESULT).o
+	#mv platform.o build/cooja///$(LIBNAME).o
+	# LOG_PRINTF
+	#objcopy --redefine-sym printf=log_printf build/cooja///$(LIBNAME).o;
+	objcopy --redefine-sym printf=log_printf test-ringbufindex.o
+	objcopy --redefine-sym printf=log_printf $(RESULT).o
+	objcopy --redefine-sym printf=log_printf build/cooja/$(LIBNAME).a
+	# LOG_PUTS
+	#objcopy --redefine-sym puts=log_puts build/cooja///$(LIBNAME).o;
+	objcopy --redefine-sym puts=log_puts test-ringbufindex.o
+	objcopy --redefine-sym puts=log_puts $(RESULT).o
+	objcopy --redefine-sym puts=log_puts build/cooja/$(LIBNAME).a
+	# LOG_PUTCHAR
+	#objcopy --redefine-sym putchar=log_putchar build/cooja///$(LIBNAME).o
+	objcopy --redefine-sym putchar=log_putchar test-ringbufindex.o
+	objcopy --redefine-sym putchar=log_putchar $(RESULT).o
+	objcopy --redefine-sym putchar=log_putchar build/cooja/$(LIBNAME).a
+	gcc -I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -shared -Wl,-Map=$(RESULT).map -o $(RESULT).cooja test-ringbufindex.o build/cooja/$(LIBNAME).a
+	cp $(RESULT).cooja test-ringbufindex.cooja
+	cp $(RESULT).map build/cooja/
+	cp test-ringbufindex.cooja build/cooja/$(LIBNAME).cooja
+	#rm test-ringbufindex.o
