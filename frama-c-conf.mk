@@ -70,7 +70,7 @@ parse: $(TARGET).parse
 ##############################################################
 N ?= 193
 LIBNAME ?= mtype$(N)
-RESULT=$(TARGET).total/$(LIBNAME)
+n: RESULT=$(TARGET).total/$(LIBNAME)
 n: total
 	@echo $(LIBNAME)
 	gcc -ffunction-sections -fdata-sections -DE_ACSL_SEGMENT_MMODEL -DE_ACSL_STACK_SIZE=32 -DE_ACSL_HEAP_SIZE=128 -std=c99 -m$(M) -g -O0 -fno-builtin -fno-merge-constants -Wno-attributes -DCONTIKI=1 -DCONTIKI_TARGET_COOJA=1 -DCONTIKI_TARGET_STRING=\"cooja\" -Wno-unused-const-variable -DPROJECT_CONF_PATH=\"project-conf.h\" -I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -DMAC_CONF_WITH_CSMA=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1  -I. -I../../../arch/platform/cooja/. -I../../../arch/platform/cooja/dev -I../../../arch/platform/cooja/lib -I../../../arch/platform/cooja/sys -I../../../arch/platform/cooja/cfs -I../../../arch/platform/cooja/net -I../../../arch -I../../../os/services/unit-test -I../../../os -I../../../os/sys -I../../../os/dev -I../../../os/lib -I../../../os/services -I../../../os -I../../../os/net -I../../../os/net/mac -I../../../os/net/mac/framer -I../../../os/net/routing -I../../../os/storage -I../../../os/net/mac/csma -I../../../os/net/ipv6 -I../../../os/net/routing/rpl-lite -I../../../arch/platform/cooja/ -I../../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-173-ge82159a-dirty\" -MMD -o $(RESULT).o -c $(TARGET).total/framac.c
@@ -99,7 +99,7 @@ n: total
 	cp test-ringbufindex.cooja build/cooja/$(LIBNAME).cooja
 	#rm test-ringbufindex.o
 ##############################################################
-RESULT=$(TARGET).parse/$(LIBNAME)
+o: RESULT=$(TARGET).parse/$(LIBNAME)
 o: parse
 	@echo $(LIBNAME)
 	gcc -DCONTIKI=1 -DCONTIKI_TARGET_COOJA=1 -DCONTIKI_TARGET_STRING=\"cooja\" -Wno-unused-const-variable -DPROJECT_CONF_PATH=\"project-conf.h\" -I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -DMAC_CONF_WITH_CSMA=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1  -I. -I../../../arch/platform/cooja/. -I../../../arch/platform/cooja/dev -I../../../arch/platform/cooja/lib -I../../../arch/platform/cooja/sys -I../../../arch/platform/cooja/cfs -I../../../arch/platform/cooja/net -I../../../arch -I../../../os/services/unit-test -I../../../os -I../../../os/sys -I../../../os/dev -I../../../os/lib -I../../../os/services -I../../../os -I../../../os/net -I../../../os/net/mac -I../../../os/net/mac/framer -I../../../os/net/routing -I../../../os/storage -I../../../os/net/mac/csma -I../../../os/net/ipv6 -I../../../os/net/routing/rpl-lite -I../../../arch/platform/cooja/ -I../../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-173-ge82159a-dirty\" -MMD -o $(RESULT).o -c $(TARGET).parse/framac.c
