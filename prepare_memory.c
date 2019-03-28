@@ -176,8 +176,8 @@ static address_range *list;
 
 address_range *get_curr(const void * const ptr, char *ptrname) {
     address_range *curr = get_address_range(list,ptr);
-    printf("%lx-%lu %lx-%lu %s\n",(unsigned long)curr->start,(unsigned long)curr->start,(unsigned long)curr->end,(unsigned long)curr->end,curr->name);
-    printf("\t %s:%lx-%lu \n",ptrname,(unsigned long)ptr,(unsigned long)ptr);
+//    printf("%lx-%lu %lx-%lu %s\n",(unsigned long)curr->start,(unsigned long)curr->start,(unsigned long)curr->end,(unsigned long)curr->end,curr->name);
+//    printf("\t %s:%lx-%lu \n",ptrname,(unsigned long)ptr,(unsigned long)ptr);
     return curr;
 }
 
@@ -190,7 +190,7 @@ uintptr_t my_end;
 uintptr_t tls_start;
 uintptr_t tls_end;
 uintptr_t my_stack_start;
-int prepare_memory()
+int prepare_memory(JNIEnv *env,jobject jobj)
 {
     int pid = getpid();
     list = mem_stats(pid);
@@ -205,8 +205,9 @@ int prepare_memory()
     tls_end = (uintptr_t) CURR(&my_tbss)->end;
     my_stack_start = (uintptr_t) CURR(&pid)->start;
 
-    main();
-
-    free_mem_stats(list);
+    Java_org_contikios_cooja_corecomm_Lib1_init(env,jobj);
+//    main();
+//
+//    free_mem_stats(list);
     return EXIT_SUCCESS;
 }
