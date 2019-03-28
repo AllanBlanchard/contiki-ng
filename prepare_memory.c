@@ -205,7 +205,8 @@ int prepare_memory(JNIEnv *env,jobject jobj)
     tls_end = (uintptr_t) CURR(&my_tbss)->end;
     my_stack_start = (uintptr_t) CURR(&pid)->start;
 
-    Java_org_contikios_cooja_corecomm_Lib1_init(env,jobj);
+    initmain();
+//    Java_org_contikios_cooja_corecomm_Lib1_init(env,jobj);
 //    main();
 //
 //    free_mem_stats(list);

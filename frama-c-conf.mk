@@ -47,7 +47,7 @@ $(TARGET).eacsl:
 FILTEREDSRCFILES=$(filter-out test-ringbufindex.c,$(SRCFILES))
 
 %.total: SOURCES = $(FILTEREDSRCFILES)
-%.total: TOTALCMD = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="-I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -fPIC -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -Werror $(CPPFLAGS)" $(SOURCES) -then -e-acsl $(FULLMMODEL) -then-last -print -ocode $@/framac.c
+%.total: TOTALCMD = $(FRAMAC) -main initmain -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="-I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -fPIC -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -Werror $(CPPFLAGS)" $(SOURCES) -then -e-acsl $(FULLMMODEL) -then-last -print -ocode $@/framac.c
 
 total: $(TARGET).total
 
@@ -61,7 +61,7 @@ $(TARGET).total:
 parse: $(TARGET).parse
 
 %.parse: SOURCES = $(FILTEREDSRCFILES)
-%.parse: PARSE = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -cpp-extra-args="-I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -fPIC -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -Werror $(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
+%.parse: PARSE = $(FRAMAC) -main initmain -no-warn-invalid-bool $(FCCOMMONFLAGS) -cpp-extra-args="-I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -fPIC -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -Werror $(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
 %.parse:
 	@mkdir -p $@
 	$(PARSE)
