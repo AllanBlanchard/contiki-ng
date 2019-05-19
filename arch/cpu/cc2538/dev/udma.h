@@ -60,6 +60,36 @@
  * \name uDMA Register offset declarations
  * @{
  */
+#ifdef __FRAMAC__
+
+static uint32_t fc_udma_regs[23];
+
+#define UDMA_STAT               (&fc_udma_regs[ 0])  /**< DMA status */
+#define UDMA_CFG                (&fc_udma_regs[ 1])  /**< DMA configuration */
+#define UDMA_CTLBASE            (&fc_udma_regs[ 2])  /**< DMA channel control base pointer */
+#define UDMA_ALTBASE            (&fc_udma_regs[ 3])  /**< DMA alternate channel control base pointer */
+#define UDMA_WAITSTAT           (&fc_udma_regs[ 4])  /**< DMA channel wait-on-request status */
+#define UDMA_SWREQ              (&fc_udma_regs[ 5])  /**< DMA channel software request */
+#define UDMA_USEBURSTSET        (&fc_udma_regs[ 6])  /**< DMA channel useburst set */
+#define UDMA_USEBURSTCLR        (&fc_udma_regs[ 7])  /**< DMA channel useburst clear */
+#define UDMA_REQMASKSET         (&fc_udma_regs[ 8])  /**< DMA channel request mask set */
+#define UDMA_REQMASKCLR         (&fc_udma_regs[ 9])  /**< DMA channel request mask clear */
+#define UDMA_ENASET             (&fc_udma_regs[10])  /**< DMA channel enable set */
+#define UDMA_ENACLR             (&fc_udma_regs[11])  /**< DMA channel enable clear */
+#define UDMA_ALTSET             (&fc_udma_regs[12])  /**< DMA channel primary alternate set */
+#define UDMA_ALTCLR             (&fc_udma_regs[13])  /**< DMA channel primary alternate clear */
+#define UDMA_PRIOSET            (&fc_udma_regs[14])  /**< DMA channel priority set */
+#define UDMA_PRIOCLR            (&fc_udma_regs[15])  /**< DMA channel priority clear */
+#define UDMA_ERRCLR             (&fc_udma_regs[16])  /**< DMA bus error clear */
+#define UDMA_CHASGN             (&fc_udma_regs[17])  /**< DMA channel assignment */
+#define UDMA_CHIS               (&fc_udma_regs[18])  /**< DMA channel interrupt status */
+#define UDMA_CHMAP0             (&fc_udma_regs[19])  /**< DMA channel map select 0 */
+#define UDMA_CHMAP1             (&fc_udma_regs[20])  /**< DMA channel map select 1 */
+#define UDMA_CHMAP2             (&fc_udma_regs[21])  /**< DMA channel map select 2 */
+#define UDMA_CHMAP3             (&fc_udma_regs[22])  /**< DMA channel map select 3 */
+
+#else
+
 #define UDMA_STAT               0x400FF000  /**< DMA status */
 #define UDMA_CFG                0x400FF004  /**< DMA configuration */
 #define UDMA_CTLBASE            0x400FF008  /**< DMA channel control base pointer */
@@ -83,6 +113,8 @@
 #define UDMA_CHMAP1             0x400FF514  /**< DMA channel map select 1 */
 #define UDMA_CHMAP2             0x400FF518  /**< DMA channel map select 2 */
 #define UDMA_CHMAP3             0x400FF51C  /**< DMA channel map select 3 */
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**

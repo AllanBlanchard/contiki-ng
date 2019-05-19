@@ -43,7 +43,16 @@
  * \name ANA_REGS register offsets
  * @{
  */
+#ifdef __FRAMAC__
+
+static uint32_t fc_ana_regs_ivctrl;
+#define ANA_REGS_IVCTRL (&fc_ana_regs_ivctrl)
+
+#else
+
 #define ANA_REGS_IVCTRL       0x400D6004
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**

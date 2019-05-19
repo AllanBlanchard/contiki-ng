@@ -235,6 +235,10 @@ Java_org_contikios_cooja_corecomm_CLASSNAME_init(JNIEnv *env, jobject obj)
   cooja_mt_start(&rtimer_thread, &rtimer_thread_loop, NULL);
   cooja_mt_start(&process_run_thread, &process_run_thread_loop, NULL);
  }
+void initmain() {
+  cooja_mt_start(&rtimer_thread, &rtimer_thread_loop, NULL);
+  cooja_mt_start(&process_run_thread, &process_run_thread_loop, NULL);
+}
 /*---------------------------------------------------------------------------*/
 /**
  * \brief      Get a segment from the process memory.

@@ -48,6 +48,45 @@
 /** \name IOC Signal Select Registers
  * @{
  */
+#ifdef __FRAMAC__
+
+static uint32_t fc_ioc_sel[32];
+
+#define IOC_PA0_SEL (&fc_ioc_sel[ 0])
+#define IOC_PA1_SEL (&fc_ioc_sel[ 1])
+#define IOC_PA2_SEL (&fc_ioc_sel[ 2])
+#define IOC_PA3_SEL (&fc_ioc_sel[ 3])
+#define IOC_PA4_SEL (&fc_ioc_sel[ 4])
+#define IOC_PA5_SEL (&fc_ioc_sel[ 5])
+#define IOC_PA6_SEL (&fc_ioc_sel[ 6])
+#define IOC_PA7_SEL (&fc_ioc_sel[ 7])
+#define IOC_PB0_SEL (&fc_ioc_sel[ 8])
+#define IOC_PB1_SEL (&fc_ioc_sel[ 9])
+#define IOC_PB2_SEL (&fc_ioc_sel[10])
+#define IOC_PB3_SEL (&fc_ioc_sel[11])
+#define IOC_PB4_SEL (&fc_ioc_sel[12])
+#define IOC_PB5_SEL (&fc_ioc_sel[13])
+#define IOC_PB6_SEL (&fc_ioc_sel[14])
+#define IOC_PB7_SEL (&fc_ioc_sel[15])
+#define IOC_PC0_SEL (&fc_ioc_sel[16])
+#define IOC_PC1_SEL (&fc_ioc_sel[17])
+#define IOC_PC2_SEL (&fc_ioc_sel[18])
+#define IOC_PC3_SEL (&fc_ioc_sel[19])
+#define IOC_PC4_SEL (&fc_ioc_sel[20])
+#define IOC_PC5_SEL (&fc_ioc_sel[21])
+#define IOC_PC6_SEL (&fc_ioc_sel[22])
+#define IOC_PC7_SEL (&fc_ioc_sel[23])
+#define IOC_PD0_SEL (&fc_ioc_sel[24])
+#define IOC_PD1_SEL (&fc_ioc_sel[25])
+#define IOC_PD2_SEL (&fc_ioc_sel[26])
+#define IOC_PD3_SEL (&fc_ioc_sel[27])
+#define IOC_PD4_SEL (&fc_ioc_sel[28])
+#define IOC_PD5_SEL (&fc_ioc_sel[29])
+#define IOC_PD6_SEL (&fc_ioc_sel[30])
+#define IOC_PD7_SEL (&fc_ioc_sel[31])
+
+#else
+
 #define IOC_PA0_SEL                 0x400D4000
 #define IOC_PA1_SEL                 0x400D4004
 #define IOC_PA2_SEL                 0x400D4008
@@ -80,11 +119,51 @@
 #define IOC_PD5_SEL                 0x400D4074
 #define IOC_PD6_SEL                 0x400D4078
 #define IOC_PD7_SEL                 0x400D407C
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name IOC Override Configuration Registers
  * @{
  */
+#ifdef __FRAMAC__
+static uint32_t fc_ioc_over[32];
+
+#define IOC_PA0_OVER (&fc_ioc_over[ 0])
+#define IOC_PA1_OVER (&fc_ioc_over[ 1])
+#define IOC_PA2_OVER (&fc_ioc_over[ 2])
+#define IOC_PA3_OVER (&fc_ioc_over[ 3])
+#define IOC_PA4_OVER (&fc_ioc_over[ 4])
+#define IOC_PA5_OVER (&fc_ioc_over[ 5])
+#define IOC_PA6_OVER (&fc_ioc_over[ 6])
+#define IOC_PA7_OVER (&fc_ioc_over[ 7])
+#define IOC_PB0_OVER (&fc_ioc_over[ 8])
+#define IOC_PB1_OVER (&fc_ioc_over[ 9])
+#define IOC_PB2_OVER (&fc_ioc_over[10])
+#define IOC_PB3_OVER (&fc_ioc_over[11])
+#define IOC_PB4_OVER (&fc_ioc_over[12])
+#define IOC_PB5_OVER (&fc_ioc_over[13])
+#define IOC_PB6_OVER (&fc_ioc_over[14])
+#define IOC_PB7_OVER (&fc_ioc_over[15])
+#define IOC_PC0_OVER (&fc_ioc_over[16])
+#define IOC_PC1_OVER (&fc_ioc_over[17])
+#define IOC_PC2_OVER (&fc_ioc_over[18])
+#define IOC_PC3_OVER (&fc_ioc_over[19])
+#define IOC_PC4_OVER (&fc_ioc_over[20])
+#define IOC_PC5_OVER (&fc_ioc_over[21])
+#define IOC_PC6_OVER (&fc_ioc_over[22])
+#define IOC_PC7_OVER (&fc_ioc_over[23])
+#define IOC_PD0_OVER (&fc_ioc_over[24])
+#define IOC_PD1_OVER (&fc_ioc_over[25])
+#define IOC_PD2_OVER (&fc_ioc_over[26])
+#define IOC_PD3_OVER (&fc_ioc_over[27])
+#define IOC_PD4_OVER (&fc_ioc_over[28])
+#define IOC_PD5_OVER (&fc_ioc_over[29])
+#define IOC_PD6_OVER (&fc_ioc_over[30])
+#define IOC_PD7_OVER (&fc_ioc_over[31])
+
+#else
+
 #define IOC_PA0_OVER                0x400D4080
 #define IOC_PA1_OVER                0x400D4084
 #define IOC_PA2_OVER                0x400D4088
@@ -117,11 +196,41 @@
 #define IOC_PD5_OVER                0x400D40F4
 #define IOC_PD6_OVER                0x400D40F8
 #define IOC_PD7_OVER                0x400D40FC
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name IOC Input Pin Select Registers
  * @{
  */
+#ifdef __FRAMAC__
+
+static uint32_t fc_ioc_pin_sel[21];
+
+#define IOC_UARTRXD_UART0           (&fc_ioc_pin_sel[ 0])  /**< UART0 RX */
+#define IOC_UARTCTS_UART1           (&fc_ioc_pin_sel[ 1])  /**< UART1 CTS */
+#define IOC_UARTRXD_UART1           (&fc_ioc_pin_sel[ 2])  /**< UART1 RX */
+#define IOC_CLK_SSI_SSI0            (&fc_ioc_pin_sel[ 3])  /**< SSI0 Clock */
+#define IOC_SSIRXD_SSI0             (&fc_ioc_pin_sel[ 4])  /**< SSI0 RX */
+#define IOC_SSIFSSIN_SSI0           (&fc_ioc_pin_sel[ 5])  /**< SSI0 FSSIN */
+#define IOC_CLK_SSIIN_SSI0          (&fc_ioc_pin_sel[ 6])  /**< SSI0 Clock SSIIN */
+#define IOC_CLK_SSI_SSI1            (&fc_ioc_pin_sel[ 7])  /**< SSI1 Clock */
+#define IOC_SSIRXD_SSI1             (&fc_ioc_pin_sel[ 8])  /**< SSI1 RX */
+#define IOC_SSIFSSIN_SSI1           (&fc_ioc_pin_sel[ 9])  /**< SSI1 FSSIN Select */
+#define IOC_CLK_SSIIN_SSI1          (&fc_ioc_pin_sel[10])  /**< SSI1 Clock SSIIN */
+#define IOC_I2CMSSDA                (&fc_ioc_pin_sel[11])  /**< I2C SDA */
+#define IOC_I2CMSSCL                (&fc_ioc_pin_sel[12])  /**< I2C SCL */
+#define IOC_GPT0OCP1                (&fc_ioc_pin_sel[13])  /**< GPT0OCP1 */
+#define IOC_GPT0OCP2                (&fc_ioc_pin_sel[14])  /**< GPT0OCP2 */
+#define IOC_GPT1OCP1                (&fc_ioc_pin_sel[15])  /**< GPT1OCP1 */
+#define IOC_GPT1OCP2                (&fc_ioc_pin_sel[16])  /**< GPT1OCP2 */
+#define IOC_GPT2OCP1                (&fc_ioc_pin_sel[17])  /**< GPT2OCP1 */
+#define IOC_GPT2OCP2                (&fc_ioc_pin_sel[18])  /**< GPT2OCP2 */
+#define IOC_GPT3OCP1                (&fc_ioc_pin_sel[19])  /**< GPT3OCP1 */
+#define IOC_GPT3OCP2                (&fc_ioc_pin_sel[10])  /**< GPT3OCP2 */
+
+#else
+
 #define IOC_UARTRXD_UART0           0x400D4100  /**< UART0 RX */
 #define IOC_UARTCTS_UART1           0x400D4104  /**< UART1 CTS */
 #define IOC_UARTRXD_UART1           0x400D4108  /**< UART1 RX */
@@ -143,6 +252,8 @@
 #define IOC_GPT2OCP2                0x400D4148  /**< GPT2OCP2 */
 #define IOC_GPT3OCP1                0x400D414C  /**< GPT3OCP1 */
 #define IOC_GPT3OCP2                0x400D4150  /**< GPT3OCP2 */
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name I/O Control Register Bit Masks

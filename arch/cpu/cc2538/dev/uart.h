@@ -56,8 +56,18 @@
 /** \name UART base addresses
  * @{
  */
+#ifdef __FRAMAC__
+
+static char* fc_uart_bases[0x2000];
+#define UART_0_BASE   (&fc_uart_bases[0x0000])
+#define UART_1_BASE   (&fc_uart_bases[0x1000])
+
+#else
+
 #define UART_0_BASE           0x4000C000
 #define UART_1_BASE           0x4000D000
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name UART Register Offsets

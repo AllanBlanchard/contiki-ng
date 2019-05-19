@@ -49,7 +49,7 @@ endif
 	@cat summary
 
 %.testlog: %.csc cooja
-	@$(CONTIKI)/tests/simexec.sh "$<" "$(CONTIKI)" "$(basename $@)" $(BASESEED) $(RUNCOUNT)
+	$(CONTIKI)/tests/simexec.sh "$<" "$(CONTIKI)" "$(basename $@)" $(BASESEED) $(RUNCOUNT)
 
 clean:
 	@rm -f *.*log report summary

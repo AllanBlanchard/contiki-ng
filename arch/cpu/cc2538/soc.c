@@ -70,7 +70,11 @@
 uint8_t
 soc_get_rev(void)
 {
+#ifdef __FRAMAC__
+  uint8_t rev = 0x00 ;
+#else
   uint8_t rev = (REG(DIECFG2) & DIECFG2_DIE_REV_MSK) >> DIECFG2_DIE_REV_OFS;
+#endif
 
   /* PG1.0 is encoded as 0x00. */
   if(!(rev >> 4))
@@ -81,16 +85,24 @@ soc_get_rev(void)
 uint32_t
 soc_get_sram_size(void)
 {
+#ifdef __FRAMAC__
+  return 32 << 10;
+#else
   uint32_t size_code = (REG(DIECFG0) & DIECFG0_SRAM_SIZE_MSK) >>
                        DIECFG0_SRAM_SIZE_OFS;
 
   return size_code <= 1 ? (2 - size_code) << 13 : 32 << 10;
+#endif
 }
 /*----------------------------------------------------------------------------*/
 uint32_t
 soc_get_features(void)
 {
+#ifdef __FRAMAC__
+  return SOC_FEATURE_AES_SHA & SOC_FEATURE_ECC_RSA ;
+#else
   return REG(DIECFG2) & (DIECFG2_AES_EN | DIECFG2_PKA_EN);
+#endif
 }
 /*----------------------------------------------------------------------------*/
 void

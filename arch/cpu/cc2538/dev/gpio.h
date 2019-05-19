@@ -52,10 +52,22 @@
 /** \name Base addresses for the GPIO register instances
  * @{
  */
+#ifdef __FRAMAC__
+static volatile char GPIOs[0x00004000];
+
+#define GPIO_A_BASE             ((char*) &GPIOs[0]       ) /**< GPIO_A */
+#define GPIO_B_BASE             ((char*) &GPIOs[0]+0x1000) /**< GPIO_B */
+#define GPIO_C_BASE             ((char*) &GPIOs[0]+0x2000) /**< GPIO_C */
+#define GPIO_D_BASE             ((char*) &GPIOs[0]+0x3000) /**< GPIO_D */
+
+#else
+
 #define GPIO_A_BASE             0x400D9000 /**< GPIO_A */
 #define GPIO_B_BASE             0x400DA000 /**< GPIO_B */
 #define GPIO_C_BASE             0x400DB000 /**< GPIO_C */
 #define GPIO_D_BASE             0x400DC000 /**< GPIO_D */
+
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name Numeric representation of the four GPIO ports

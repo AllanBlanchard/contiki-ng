@@ -76,10 +76,19 @@
  * \brief Select which address location to use
  * @{
  */
+#ifdef __FRAMAC__
+
+static uint64_t fc_ieee_addr_location;
+#define IEEE_ADDR_LOCATION (&fc_ieee_addr_location)
+
+#else
+
 #if IEEE_ADDR_CONF_USE_SECONDARY_LOCATION
 #define IEEE_ADDR_LOCATION IEEE_ADDR_LOCATION_SECONDARY
 #else
 #define IEEE_ADDR_LOCATION IEEE_ADDR_LOCATION_PRIMARY
+#endif
+
 #endif
 /** @} */
 /*---------------------------------------------------------------------------*/

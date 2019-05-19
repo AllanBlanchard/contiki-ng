@@ -326,7 +326,7 @@ CONTIKI_NG_PROJECT_MAP = $(BUILD_DIR_BOARD)/$(basename $(notdir $@)).map
 
 .PHONY: clean distclean usage help targets boards savetarget savedefines viewconf
 
-clean:
+clean::
 	-$(Q)rm -f *.d *.e *.o $(CLEAN)
 	-$(Q)rm -rf $(BUILD_DIR_TARGET)
 	-$(Q)rm -f $(addsuffix .$(TARGET), $(CONTIKI_PROJECT))
@@ -495,3 +495,7 @@ else
 %: %.$(TARGET)
 	@
 endif
+
+
+
+-include $(CONTIKI)/frama-c-conf.mk

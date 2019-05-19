@@ -339,7 +339,12 @@ upper_layer_chksum(uint8_t proto)
  * upper_layer_len triggers this bug unless it is declared volatile.
  * See https://sourceforge.net/apps/mantisbt/contiki/view.php?id=3
  */
+#ifdef __FRAMAC__
+  /* Removed "volatile" hack to avoid imprecision on volatile */
+  uint16_t upper_layer_len;
+#else
   volatile uint16_t upper_layer_len;
+#endif
   uint16_t sum;
 
   upper_layer_len = uipbuf_get_len_field(UIP_IP_BUF) - uip_ext_len;
@@ -1245,7 +1250,7 @@ uip_process(uint8_t flag)
        !uip_is_addr_unspecified(&UIP_IP_BUF->srcipaddr) &&
        !uip_is_addr_loopback(&UIP_IP_BUF->destipaddr)) {
 
-      if(!uip_check_mtu() || !uip_update_ttl()) {
+      if(!(uip_check_mtu() && uip_update_ttl())) {
         /* Send ICMPv6 error, prepared by the function that just returned false */
         goto send;
       }
@@ -1363,7 +1368,7 @@ uip_process(uint8_t flag)
           /* The MTU and TTL were not checked and updated yet, because with
            * a routing header, the IPv6 destination address was set to us
            * even though we act only as forwarder. Check MTU and TTL now */
-          if(!uip_check_mtu() || !uip_update_ttl()) {
+          if(!(uip_check_mtu() && uip_update_ttl())) {
             /* Send ICMPv6 error, prepared by the function that just returned false */
             goto send;
           }

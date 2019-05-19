@@ -102,72 +102,64 @@ void cooja_sw(void)
 {
   /* Store registers */
 #if ON_64BIT_ARCH
-  __asm__ (
-      "pushq %rax\n\t"
-      "pushq %rbx\n\t"
-      "pushq %rcx\n\t"
-      "pushq %rdx\n\t"
-      "pushq %rsi\n\t"
-      "pushq %rdi\n\t"
-      "pushq %rbp\n\t"
-      "pushq %rbp\n\t");
+  __asm__("pushq %%rax\n\t" : );
+  __asm__("pushq %%rbx\n\t" : );
+  __asm__("pushq %%rcx\n\t" : );
+  __asm__("pushq %%rdx\n\t" : );
+  __asm__("pushq %%rsi\n\t" : );
+  __asm__("pushq %%rdi\n\t" : );
+  __asm__("pushq %%rbp\n\t" : );
+  __asm__("pushq %%rbp\n\t" : );
 #else /* ON_64BIT_ARCH */
-  __asm__ (
-      "pushl %eax\n\t"
-      "pushl %ebx\n\t"
-      "pushl %ecx\n\t"
-      "pushl %edx\n\t"
-      "pushl %esi\n\t"
-      "pushl %edi\n\t"
-      "pushl %ebp\n\t"
-      "pushl %ebp\n\t");
+  __asm__("pushl %%eax\n\t" : );
+  __asm__("pushl %%ebx\n\t" : );
+  __asm__("pushl %%ecx\n\t" : );
+  __asm__("pushl %%edx\n\t" : );
+  __asm__("pushl %%esi\n\t" : );
+  __asm__("pushl %%edi\n\t" : );
+  __asm__("pushl %%ebp\n\t" : );
+  __asm__("pushl %%ebp\n\t" : );
 #endif /* ON_64BIT_ARCH */
 
   /* Switch stack pointer */
 #if ON_64BIT_ARCH
-  __asm__ ("movq %0, %%rax\n\t" : : "m" (cooja_running_thread));
-  __asm__ (
-      "movq (%rax), %rbx\n\t"
-      "movq %rsp, (%rax)\n\t"
-      "movq %rbx, %rsp\n\t"
-  );
+  __asm__("movq %0, %%rax\n\t" : : "m" (cooja_running_thread));
+  __asm__("movq (%%rax), %%rbx\n\t" : );
+  __asm__("movq %%rsp, (%%rax)\n\t" : );
+  __asm__("movq %%rbx, %%rsp\n\t" : );
 #else /* ON_64BIT_ARCH */
-  __asm__ ("movl %0, %%eax\n\t" : : "m" (cooja_running_thread));
-  __asm__ (
-      "movl (%eax), %ebx\n\t"
-      "movl %esp, (%eax)\n\t"
-      "movl %ebx, %esp\n\t"
-  );
+  __asm__("movl %0, %%eax\n\t" : : "m" (cooja_running_thread));
+  __asm__("movl (%%eax), %%ebx\n\t" : );
+  __asm__("movl %%esp, (%%eax)\n\t" : );
+  __asm__("movl %%ebx, %%esp\n\t" : );
 #endif /* ON_64BIT_ARCH */
 
   /* Restore previous registers */
 #if ON_64BIT_ARCH
-  __asm__ (
-      "popq %rbp\n\t"
-      "popq %rbp\n\t"
-      "popq %rdi\n\t"
-      "popq %rsi\n\t"
-      "popq %rdx\n\t"
-      "popq %rcx\n\t"
-      "popq %rbx\n\t"
-      "popq %rax\n\t"
-
+  __asm__("popq %%rbp\n\t" : );
+  __asm__("popq %%rbp\n\t" : );
+  __asm__("popq %%rdi\n\t" : );
+  __asm__("popq %%rsi\n\t" : );
+  __asm__("popq %%rdx\n\t" : );
+  __asm__("popq %%rcx\n\t" : );
+  __asm__("popq %%rbx\n\t" : );
+  __asm__("popq %%rax\n\t" : );
+  __asm__(
       "leave\n\t"
       "ret\n\t"
   );
 #else /* ON_64BIT_ARCH */
-  __asm__ (
-      "popl %ebp\n\t"
-      "popl %ebp\n\t"
-      "popl %edi\n\t"
-      "popl %esi\n\t"
-      "popl %edx\n\t"
-      "popl %ecx\n\t"
-      "popl %ebx\n\t"
-      "popl %eax\n\t"
-
-      "leave\n\t"
-      "ret\n\t"
+  __asm__("popl %%ebp\n\t" : );
+  __asm__("popl %%ebp\n\t" : );
+  __asm__("popl %%edi\n\t" : );
+  __asm__("popl %%esi\n\t" : );
+  __asm__("popl %%edx\n\t" : );
+  __asm__("popl %%ecx\n\t" : );
+  __asm__("popl %%ebx\n\t" : );
+  __asm__("popl %%eax\n\t" : );
+  __asm__(
+          "leave\n\t"
+          "ret\n\t"
   );
 #endif /* ON_64BIT_ARCH */
 

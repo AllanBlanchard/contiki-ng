@@ -49,7 +49,9 @@
 #include "dev/watchdog.h"
 
 #include "net/queuebuf.h"
+#if BUILD_WITH_COAP
 #include "net/app-layer/coap/coap-engine.h"
+#endif
 #include "services/rpl-border-router/rpl-border-router.h"
 #include "services/orchestra/orchestra.h"
 #include "services/shell/serial-shell.h"
@@ -96,7 +98,7 @@ main(void)
   netstack_init();
   node_id_init();
 
-  LOG_INFO("Starting " CONTIKI_VERSION_STRING "\n");
+//  LOG_INFO("Starting " CONTIKI_VERSION_STRING "\n");
   LOG_INFO("- Routing: %s\n", NETSTACK_ROUTING.name);
   LOG_INFO("- Net: %s\n", NETSTACK_NETWORK.name);
   LOG_INFO("- MAC: %s\n", NETSTACK_MAC.name);

@@ -41,6 +41,111 @@
 /** \name RFCORE_FFSM register offsets
  * @{
  */
+#ifdef __FRAMAC__
+
+static uint32_t rfcore_xreg[98];
+
+#define RFCORE_XREG_FRMFILT0    (&rfcore_xreg[  0]) /**< Frame filtering control */
+#define RFCORE_XREG_FRMFILT1    (&rfcore_xreg[  1]) /**< Frame filtering control */
+#define RFCORE_XREG_SRCMATCH    (&rfcore_xreg[  2]) /**< Source address matching */
+#define RFCORE_XREG_SRCSHORTEN0 (&rfcore_xreg[  3]) /**< Short address matching */
+#define RFCORE_XREG_SRCSHORTEN1 (&rfcore_xreg[  4]) /**< Short address matching */
+#define RFCORE_XREG_SRCSHORTEN2 (&rfcore_xreg[  5]) /**< Short address matching */
+#define RFCORE_XREG_SRCEXTEN0   (&rfcore_xreg[  6]) /**< Extended address matching */
+#define RFCORE_XREG_SRCEXTEN1   (&rfcore_xreg[  7]) /**< Extended address matching */
+#define RFCORE_XREG_SRCEXTEN2   (&rfcore_xreg[  8]) /**< Extended address matching */
+#define RFCORE_XREG_FRMCTRL0    (&rfcore_xreg[  9]) /**< Frame handling */
+#define RFCORE_XREG_FRMCTRL1    (&rfcore_xreg[ 10]) /**< Frame handling */
+#define RFCORE_XREG_RXENABLE    (&rfcore_xreg[ 11]) /**< RX enabling */
+#define RFCORE_XREG_RXMASKSET   (&rfcore_xreg[ 12]) /**< RX enabling */
+#define RFCORE_XREG_RXMASKCLR   (&rfcore_xreg[ 13]) /**< RX disabling */
+#define RFCORE_XREG_FREQTUNE    (&rfcore_xreg[ 14]) /**< Crystal oscillator freq tuning */
+#define RFCORE_XREG_FREQCTRL    (&rfcore_xreg[ 15]) /**< Controls the RF frequency */
+#define RFCORE_XREG_TXPOWER     (&rfcore_xreg[ 16]) /**< Controls the output power */
+#define RFCORE_XREG_TXCTRL      (&rfcore_xreg[ 17]) /**< Controls the TX settings */
+#define RFCORE_XREG_FSMSTAT0    (&rfcore_xreg[ 18]) /**< Radio status register */
+#define RFCORE_XREG_FSMSTAT1    (&rfcore_xreg[ 19]) /**< Radio status register */
+#define RFCORE_XREG_FIFOPCTRL   (&rfcore_xreg[ 20]) /**< FIFOP threshold */
+#define RFCORE_XREG_FSMCTRL     (&rfcore_xreg[ 21]) /**< FSM options */
+#define RFCORE_XREG_CCACTRL0    (&rfcore_xreg[ 22]) /**< CCA threshold */
+#define RFCORE_XREG_CCACTRL1    (&rfcore_xreg[ 23]) /**< Other CCA Options */
+#define RFCORE_XREG_RSSI        (&rfcore_xreg[ 24]) /**< RSSI status register */
+#define RFCORE_XREG_RSSISTAT    (&rfcore_xreg[ 25]) /**< RSSI valid status register */
+#define RFCORE_XREG_RXFIRST     (&rfcore_xreg[ 26]) /**< First byte in RX FIFO */
+#define RFCORE_XREG_RXFIFOCNT   (&rfcore_xreg[ 27]) /**< Number of bytes in RX FIFO */
+#define RFCORE_XREG_TXFIFOCNT   (&rfcore_xreg[ 28]) /**< Number of bytes in TX FIFO */
+#define RFCORE_XREG_RXFIRST_PTR (&rfcore_xreg[ 29]) /**< RX FIFO pointer */
+#define RFCORE_XREG_RXLAST_PTR  (&rfcore_xreg[ 30]) /**< RX FIFO pointer */
+#define RFCORE_XREG_RXP1_PTR    (&rfcore_xreg[ 31]) /**< RX FIFO pointer */
+#define RFCORE_XREG_RXP2_PTR    (&rfcore_xreg[ 32]) /**< RX FIFO pointer */
+#define RFCORE_XREG_TXFIRST_PTR (&rfcore_xreg[ 33]) /**< TX FIFO pointer */
+#define RFCORE_XREG_TXLAST_PTR  (&rfcore_xreg[ 34]) /**< TX FIFO pointer */
+#define RFCORE_XREG_RFIRQM0     (&rfcore_xreg[ 35]) /**< RF interrupt masks */
+#define RFCORE_XREG_RFIRQM1     (&rfcore_xreg[ 36]) /**< RF interrupt masks */
+#define RFCORE_XREG_RFERRM      (&rfcore_xreg[ 37]) /**< RF error interrupt mask */
+#define RFCORE_XREG_D18_SPARE_OPAMPMC (&rfcore_xreg[ 38]) /**< Operational amp mode ctrl */
+#define RFCORE_XREG_RFRND       (&rfcore_xreg[ 39]) /**< Random data */
+#define RFCORE_XREG_MDMCTRL0    (&rfcore_xreg[ 40]) /**< Controls modem */
+#define RFCORE_XREG_MDMCTRL1    (&rfcore_xreg[ 41]) /**< Controls modem */
+#define RFCORE_XREG_FREQEST     (&rfcore_xreg[ 42]) /**< Estimated RF frequency offset */
+#define RFCORE_XREG_RXCTRL      (&rfcore_xreg[ 43]) /**< Tune receive section */
+#define RFCORE_XREG_FSCTRL      (&rfcore_xreg[ 44]) /**< Tune frequency synthesizer */
+#define RFCORE_XREG_FSCAL1      (&rfcore_xreg[ 45]) /**< Tune frequency calibration */
+#define RFCORE_XREG_FSCAL2      (&rfcore_xreg[ 46]) /**< Tune frequency calibration */
+#define RFCORE_XREG_FSCAL3      (&rfcore_xreg[ 47]) /**< Tune frequency calibration */
+#define RFCORE_XREG_AGCCTRL0    (&rfcore_xreg[ 48]) /**< AGC dynamic range control */
+#define RFCORE_XREG_AGCCTRL1    (&rfcore_xreg[ 49]) /**< AGC reference level */
+#define RFCORE_XREG_AGCCTRL2    (&rfcore_xreg[ 50]) /**< AGC gain override */
+#define RFCORE_XREG_AGCCTRL3    (&rfcore_xreg[ 51]) /**< AGC control */
+#define RFCORE_XREG_ADCTEST0    (&rfcore_xreg[ 52]) /**< ADC tuning */
+#define RFCORE_XREG_ADCTEST1    (&rfcore_xreg[ 53]  /**< ADC tuning */
+#define RFCORE_XREG_ADCTEST2    (&rfcore_xreg[ 54]) /**< ADC tuning */
+#define RFCORE_XREG_MDMTEST0    (&rfcore_xreg[ 55]) /**< Test register for modem */
+#define RFCORE_XREG_MDMTEST1    (&rfcore_xreg[ 56]) /**< Test Register for Modem */
+#define RFCORE_XREG_DACTEST0    (&rfcore_xreg[ 57]) /**< DAC override value */
+#define RFCORE_XREG_DACTEST1    (&rfcore_xreg[ 58]) /**< DAC override value */
+#define RFCORE_XREG_DACTEST2    (&rfcore_xreg[ 59]) /**< DAC test setting */
+#define RFCORE_XREG_ATEST       (&rfcore_xreg[ 60]) /**< Analog test control */
+#define RFCORE_XREG_PTEST0      (&rfcore_xreg[ 61]) /**< Override power-down register */
+#define RFCORE_XREG_PTEST1      (&rfcore_xreg[ 62]) /**< Override power-down register */
+#define RFCORE_XREG_CSPPROG0    (&rfcore_xreg[ 63]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG1    (&rfcore_xreg[ 64]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG2    (&rfcore_xreg[ 65]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG3    (&rfcore_xreg[ 66]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG4    (&rfcore_xreg[ 67]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG5    (&rfcore_xreg[ 68]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG6    (&rfcore_xreg[ 69]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG7    (&rfcore_xreg[ 70]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG8    (&rfcore_xreg[ 71]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG9    (&rfcore_xreg[ 72]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG10   (&rfcore_xreg[ 73]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG11   (&rfcore_xreg[ 74]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG12   (&rfcore_xreg[ 75]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG13   (&rfcore_xreg[ 76]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG14   (&rfcore_xreg[ 77]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG15   (&rfcore_xreg[ 78]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG16   (&rfcore_xreg[ 79]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG17   (&rfcore_xreg[ 80]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG18   (&rfcore_xreg[ 81]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG19   (&rfcore_xreg[ 82]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG20   (&rfcore_xreg[ 83]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG21   (&rfcore_xreg[ 84]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG22   (&rfcore_xreg[ 85]) /**< CSP program */
+#define RFCORE_XREG_CSPPROG23   (&rfcore_xreg[ 86]) /**< CSP program */
+#define RFCORE_XREG_CSPCTRL     (&rfcore_xreg[ 87]) /**< CSP control bit */
+#define RFCORE_XREG_CSPSTAT     (&rfcore_xreg[ 88]) /**< CSP status register */
+#define RFCORE_XREG_CSPX        (&rfcore_xreg[ 89]) /**< CSP X data register */
+#define RFCORE_XREG_CSPY        (&rfcore_xreg[ 90]) /**< CSP Y data register */
+#define RFCORE_XREG_CSPZ        (&rfcore_xreg[ 91]) /**< CSP Z data register */
+#define RFCORE_XREG_CSPT        (&rfcore_xreg[ 92]) /**< CSP T data register */
+#define RFCORE_XREG_RFC_DUTY_CYCLE (&rfcore_xreg[93]) /**< RX duty cycle control */
+#define RFCORE_XREG_RFC_OBS_CTRL0  (&rfcore_xreg[94]) /**< RF observation mux control */
+#define RFCORE_XREG_RFC_OBS_CTRL1  (&rfcore_xreg[95]) /**< RF observation mux control */
+#define RFCORE_XREG_RFC_OBS_CTRL2  (&rfcore_xreg[96]) /**< RF observation mux control */
+#define RFCORE_XREG_TXFILTCFG   (&rfcore_xreg[97]) /**< TX filter configuration */
+
+#else
+
 #define RFCORE_XREG_FRMFILT0    0x40088600 /**< Frame filtering control */
 #define RFCORE_XREG_FRMFILT1    0x40088604 /**< Frame filtering control */
 #define RFCORE_XREG_SRCMATCH    0x40088608 /**< Source address matching */
@@ -139,6 +244,9 @@
 #define RFCORE_XREG_RFC_OBS_CTRL1  0x400887B0 /**< RF observation mux control */
 #define RFCORE_XREG_RFC_OBS_CTRL2  0x400887B4 /**< RF observation mux control */
 #define RFCORE_XREG_TXFILTCFG   0x400887E8 /**< TX filter configuration */
+
+#endif
+
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name RFCORE_XREG_FRMFILT0 register offsets

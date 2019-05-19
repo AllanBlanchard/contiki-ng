@@ -43,6 +43,27 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 
+#ifdef __FRAMAC__
+extern uint32_t __builtin_bswap32(uint32_t);
+extern uint16_t __builtin_bswap16(uint16_t);
+#endif
+
+#ifdef __FRAMAC__
+//@ ghost static uint32_t fc_irq = 0;
+//@ ghost static uint32_t fc_fiq = 0;
+//@ ghost static uint32_t fc_ctrl = 0;
+//@ ghost static uint32_t fc_ipsr = 0;
+//@ ghost static uint32_t fc_apsr = 0;
+//@ ghost static uint32_t fc_xpsr = 0;
+//@ ghost static uint32_t fc_psp = 0;
+//@ ghost static uint32_t fc_msp = 0;
+//@ ghost static uint32_t fc_primask = 0;
+//@ ghost static uint32_t fc_basepri = 0;
+//@ ghost static uint32_t fc_basepri_max = 0;
+//@ ghost static uint32_t fc_faultmask = 0;
+//@ ghost static uint32_t fc_fpscr = 0;
+#endif
+
 
 /* ###########################  Core Function Access  ########################### */
 /** \ingroup  CMSIS_Core_FunctionInterface
@@ -55,21 +76,36 @@
   \details Enables IRQ interrupts by clearing the I-bit in the CPSR.
            Can only be executed in Privileged modes.
  */
+/*@
+  assigns fc_irq \from \nothing;
+  ensures fc_irq == 1;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_irq(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("cpsie i" : : : "memory");
 }
-
+#endif
 
 /**
   \brief   Disable IRQ Interrupts
   \details Disables IRQ interrupts by setting the I-bit in the CPSR.
   Can only be executed in Privileged modes.
  */
+/*@
+  assigns fc_irq \from \nothing;
+  ensures fc_irq == 0;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_irq(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("cpsid i" : : : "memory");
 }
+#endif
 
 
 /**
@@ -77,53 +113,81 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_irq(void)
   \details Returns the content of the Control Register.
   \return               Control Register value
  */
+/*@
+  assigns \result \from fc_ctrl ;
+  ensures \result == fc_ctrl ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_CONTROL(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   uint32_t result;
 
   __ASM volatile ("MRS %0, control" : "=r" (result) );
   return(result);
 }
-
+#endif
 
 /**
   \brief   Set Control Register
   \details Writes the given value to the Control Register.
   \param [in]    control  Control Register value to set
  */
+/*@
+  assigns fc_ctrl \from control ;
+  ensures fc_ctrl == control ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_CONTROL(uint32_t control)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("MSR control, %0" : : "r" (control) : "memory");
 }
-
+#endif
 
 /**
   \brief   Get IPSR Register
   \details Returns the content of the IPSR Register.
   \return               IPSR Register value
  */
+/*@
+  assigns \result \from fc_ipsr ;
+  ensures \result == fc_ipsr ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_IPSR(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   uint32_t result;
 
   __ASM volatile ("MRS %0, ipsr" : "=r" (result) );
   return(result);
 }
-
+#endif
 
 /**
   \brief   Get APSR Register
   \details Returns the content of the APSR Register.
   \return               APSR Register value
  */
+/*@
+  assigns \result \from fc_apsr ;
+  ensures \result == fc_apsr ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_APSR(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   uint32_t result;
 
   __ASM volatile ("MRS %0, apsr" : "=r" (result) );
   return(result);
 }
-
+#endif
 
 /**
   \brief   Get xPSR Register
@@ -131,53 +195,81 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_APSR(void)
 
     \return               xPSR Register value
  */
+/*@
+  assigns \result \from fc_xpsr ;
+  ensures \result == fc_xpsr ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_xPSR(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   uint32_t result;
 
   __ASM volatile ("MRS %0, xpsr" : "=r" (result) );
   return(result);
 }
-
+#endif
 
 /**
   \brief   Get Process Stack Pointer
   \details Returns the current value of the Process Stack Pointer (PSP).
   \return               PSP Register value
  */
+/*@
+  assigns \result \from fc_psp ;
+  ensures \result == fc_psp ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PSP(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   register uint32_t result;
 
   __ASM volatile ("MRS %0, psp\n"  : "=r" (result) );
   return(result);
 }
-
+#endif
 
 /**
   \brief   Set Process Stack Pointer
   \details Assigns the given value to the Process Stack Pointer (PSP).
   \param [in]    topOfProcStack  Process Stack Pointer value to set
  */
+/*@
+  assigns fc_psp \from topOfProcStack ;
+  ensures fc_psp == topOfProcStack ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("MSR psp, %0\n" : : "r" (topOfProcStack) : "sp");
 }
-
+#endif
 
 /**
   \brief   Get Main Stack Pointer
   \details Returns the current value of the Main Stack Pointer (MSP).
   \return               MSP Register value
  */
+/*@
+  assigns \result \from fc_msp ;
+  ensures \result == fc_msp ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_MSP(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   register uint32_t result;
 
   __ASM volatile ("MRS %0, msp\n" : "=r" (result) );
   return(result);
 }
-
+#endif
 
 /**
   \brief   Set Main Stack Pointer
@@ -185,10 +277,18 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_MSP(void)
 
     \param [in]    topOfMainStack  Main Stack Pointer value to set
  */
+/*@
+  assigns fc_msp \from topOfMainStack ;
+  ensures fc_msp == topOfMainStack ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("MSR msp, %0\n" : : "r" (topOfMainStack) : "sp");
 }
+#endif
 
 
 /**
@@ -196,13 +296,21 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_MSP(uint32_t topOf
   \details Returns the current state of the priority mask bit from the Priority Mask Register.
   \return               Priority Mask value
  */
+/*@
+  assigns \result \from fc_primask ;
+  ensures \result == fc_primask ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PRIMASK(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   uint32_t result;
 
   __ASM volatile ("MRS %0, primask" : "=r" (result) );
   return(result);
 }
+#endif
 
 
 /**
@@ -210,10 +318,18 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_PRIMASK(void)
   \details Assigns the given value to the Priority Mask Register.
   \param [in]    priMask  Priority Mask
  */
+/*@
+  assigns fc_primask \from priMask ;
+  ensures fc_primask == priMask ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("MSR primask, %0" : : "r" (priMask) : "memory");
 }
+#endif
 
 
 #if       (__CORTEX_M >= 0x03U)
@@ -223,35 +339,57 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PRIMASK(uint32_t p
   \details Enables FIQ interrupts by clearing the F-bit in the CPSR.
            Can only be executed in Privileged modes.
  */
+/*@
+  assigns fc_fiq \from \nothing ;
+  ensures fc_fiq == 1;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_fault_irq(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("cpsie f" : : : "memory");
 }
-
+#endif
 
 /**
   \brief   Disable FIQ
   \details Disables FIQ interrupts by setting the F-bit in the CPSR.
            Can only be executed in Privileged modes.
  */
+/*@
+  assigns fc_fiq \from \nothing ;
+  ensures fc_fiq == 0;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_fault_irq(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("cpsid f" : : : "memory");
 }
-
+#endif
 
 /**
   \brief   Get Base Priority
   \details Returns the current value of the Base Priority register.
   \return               Base Priority register value
  */
+/*@
+  assigns \result \from fc_basepri ;
+  ensures \result == fc_basepri ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_BASEPRI(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   uint32_t result;
 
   __ASM volatile ("MRS %0, basepri" : "=r" (result) );
   return(result);
 }
+#endif
 
 
 /**
@@ -259,11 +397,18 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_BASEPRI(void)
   \details Assigns the given value to the Base Priority register.
   \param [in]    basePri  Base Priority value to set
  */
+/*@
+  assigns fc_basepri \from value ;
+  ensures fc_basepri == value ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_BASEPRI(uint32_t value)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("MSR basepri, %0" : : "r" (value) : "memory");
 }
-
+#endif
 
 /**
   \brief   Set Base Priority with condition
@@ -271,24 +416,38 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_BASEPRI(uint32_t v
            or the new value increases the BASEPRI priority level.
   \param [in]    basePri  Base Priority value to set
  */
+/*@
+  assigns fc_basepri \from value, fc_primask ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_BASEPRI_MAX(uint32_t value)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("MSR basepri_max, %0" : : "r" (value) : "memory");
 }
-
+#endif
 
 /**
   \brief   Get Fault Mask
   \details Returns the current value of the Fault Mask register.
   \return               Fault Mask register value
  */
+/*@
+  assigns \result \from fc_faultmask ;
+  ensures \result == fc_faultmask ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FAULTMASK(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   uint32_t result;
 
   __ASM volatile ("MRS %0, faultmask" : "=r" (result) );
   return(result);
 }
+#endif
 
 
 /**
@@ -296,10 +455,18 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FAULTMASK(void
   \details Assigns the given value to the Fault Mask register.
   \param [in]    faultMask  Fault Mask value to set
  */
+/*@
+  assigns fc_faultmask \from faultMask ;
+  ensures fc_faultmask == faultMask;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FAULTMASK(uint32_t faultMask)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("MSR faultmask, %0" : : "r" (faultMask) : "memory");
 }
+#endif
 
 #endif /* (__CORTEX_M >= 0x03U) */
 
@@ -311,36 +478,75 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FAULTMASK(uint32_t
   \details Returns the current value of the Floating Point Status/Control register.
   \return               Floating Point Status/Control register value
  */
+/*@
+  assigns \result \from fc_fpscr ;
+  ensures \result == fc_fpscr ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FPSCR(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
 #if (__FPU_PRESENT == 1U) && (__FPU_USED == 1U)
   uint32_t result;
 
-  /* Empty asm statement works as a scheduling barrier */
+  /* Empty asm statement works as a scheduling barrier [TOCHECK] */
+  /*@
+  // First approx
+  assigns \nothing ;
+  */
   __ASM volatile ("");
+  /*@
+  // First approx
+  assigns result \from \nothing ;
+  */
   __ASM volatile ("VMRS %0, fpscr" : "=r" (result) );
+  /*@
+  // First approx
+  assigns \nothing ;
+  */
   __ASM volatile ("");
   return(result);
 #else
    return(0);
 #endif
 }
-
+#endif
 
 /**
   \brief   Set FPSCR
   \details Assigns the given value to the Floating Point Status/Control register.
   \param [in]    fpscr  Floating Point Status/Control value to set
  */
+/*@
+  assigns fc_fpscr \from fpscr ;
+  ensures fc_fpscr == fpscr ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
+#ifdef __FRAMAC__
+  ;
+#else
 {
 #if (__FPU_PRESENT == 1U) && (__FPU_USED == 1U)
-  /* Empty asm statement works as a scheduling barrier */
+  /* Empty asm statement works as a scheduling barrier [TOCHECK] */
+  /*@
+  // First approx
+  assigns \nothing ;
+  */
   __ASM volatile ("");
+  /*@
+  // First approx
+  assigns result \from \nothing ;
+  */
   __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc");
+  /*@
+  // First approx
+  assigns \nothing ;
+  */
   __ASM volatile ("");
 #endif
 }
+#endif
 
 #endif /* (__CORTEX_M == 0x04U) || (__CORTEX_M == 0x07U) */
 
@@ -370,42 +576,59 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fps
   \brief   No Operation
   \details No Operation does nothing. This instruction can be used for code alignment purposes.
  */
+/*@  assigns \nothing ; */
 __attribute__((always_inline)) __STATIC_INLINE void __NOP(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("nop");
 }
+#endif
 
 
 /**
   \brief   Wait For Interrupt
   \details Wait For Interrupt is a hint instruction that suspends execution until one of a number of events occurs.
  */
+/*@ assigns \nothing ; */
 __attribute__((always_inline)) __STATIC_INLINE void __WFI(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("wfi");
 }
-
+#endif
 
 /**
   \brief   Wait For Event
   \details Wait For Event is a hint instruction that permits the processor to enter
     a low-power state until one of a number of events occurs.
  */
+/*@ assigns \nothing ; */
 __attribute__((always_inline)) __STATIC_INLINE void __WFE(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("wfe");
 }
-
+#endif
 
 /**
   \brief   Send Event
   \details Send Event is a hint instruction. It causes an event to be signaled to the CPU.
  */
+/*@ assigns \nothing ; */
 __attribute__((always_inline)) __STATIC_INLINE void __SEV(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("sev");
 }
-
+#endif
 
 /**
   \brief   Instruction Synchronization Barrier
@@ -413,10 +636,15 @@ __attribute__((always_inline)) __STATIC_INLINE void __SEV(void)
            so that all instructions following the ISB are fetched from cache or memory,
            after the instruction has been completed.
  */
+/*@ assigns \nothing ; */
 __attribute__((always_inline)) __STATIC_INLINE void __ISB(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("isb 0xF":::"memory");
 }
+#endif
 
 
 /**
@@ -424,22 +652,30 @@ __attribute__((always_inline)) __STATIC_INLINE void __ISB(void)
   \details Acts as a special kind of Data Memory Barrier.
            It completes when all explicit memory accesses before this instruction complete.
  */
+/*@ assigns \nothing ; */
 __attribute__((always_inline)) __STATIC_INLINE void __DSB(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("dsb 0xF":::"memory");
 }
-
+#endif
 
 /**
   \brief   Data Memory Barrier
   \details Ensures the apparent order of the explicit memory operations before
            and after the instruction, without ensuring their completion.
  */
+/*@ assigns \nothing ; */
 __attribute__((always_inline)) __STATIC_INLINE void __DMB(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
   __ASM volatile ("dmb 0xF":::"memory");
 }
-
+#endif
 
 /**
   \brief   Reverse byte order (32 bit)
@@ -447,13 +683,20 @@ __attribute__((always_inline)) __STATIC_INLINE void __DMB(void)
   \param [in]    value  Value to reverse
   \return               Reversed value
  */
+/*@
+// First approx
+assigns \result \from value ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE uint32_t __REV(uint32_t value)
 {
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)
   return __builtin_bswap32(value);
 #else
   uint32_t result;
-
+  /*@
+  // First approx
+  assigns result \from value ;
+  */
   __ASM volatile ("rev %0, %1" : __CMSIS_GCC_OUT_REG (result) : __CMSIS_GCC_USE_REG (value) );
   return(result);
 #endif
@@ -466,10 +709,17 @@ __attribute__((always_inline)) __STATIC_INLINE uint32_t __REV(uint32_t value)
   \param [in]    value  Value to reverse
   \return               Reversed value
  */
+/*@
+// First approx
+assigns \result \from value ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE uint32_t __REV16(uint32_t value)
 {
   uint32_t result;
-
+  /*@
+  // First approx
+  assigns result \from value ;
+  */
   __ASM volatile ("rev16 %0, %1" : __CMSIS_GCC_OUT_REG (result) : __CMSIS_GCC_USE_REG (value) );
   return(result);
 }
@@ -481,13 +731,20 @@ __attribute__((always_inline)) __STATIC_INLINE uint32_t __REV16(uint32_t value)
   \param [in]    value  Value to reverse
   \return               Reversed value
  */
+/*@
+// First approx
+assigns \result \from value ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE int32_t __REVSH(int32_t value)
 {
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)
   return (short)__builtin_bswap16(value);
 #else
   int32_t result;
-
+  /*@
+  // First approx
+  assigns result \from value ;
+  */
   __ASM volatile ("revsh %0, %1" : __CMSIS_GCC_OUT_REG (result) : __CMSIS_GCC_USE_REG (value) );
   return(result);
 #endif
@@ -501,6 +758,10 @@ __attribute__((always_inline)) __STATIC_INLINE int32_t __REVSH(int32_t value)
   \param [in]      op2  Number of Bits to rotate
   \return               Rotated value
  */
+/*@
+// First approx
+assigns \result \from op1, op2 ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE uint32_t __ROR(uint32_t op1, uint32_t op2)
 {
   return (op1 >> op2) | (op1 << (32U - op2));
@@ -523,11 +784,19 @@ __attribute__((always_inline)) __STATIC_INLINE uint32_t __ROR(uint32_t op1, uint
   \param [in]    value  Value to reverse
   \return               Reversed value
  */
+/*@
+// First approx
+assigns \result \from value ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE uint32_t __RBIT(uint32_t value)
 {
   uint32_t result;
 
 #if       (__CORTEX_M >= 0x03U) || (__CORTEX_SC >= 300U)
+  /*@
+  // First approx
+  assigns result \from value ;
+  */
    __ASM volatile ("rbit %0, %1" : "=r" (result) : "r" (value) );
 #else
   int32_t s = 4 /*sizeof(v)*/ * 8 - 1; /* extra shift needed at end */
@@ -562,16 +831,28 @@ __attribute__((always_inline)) __STATIC_INLINE uint32_t __RBIT(uint32_t value)
   \param [in]    ptr  Pointer to data
   \return             value of type uint8_t at (*ptr)
  */
+/*@
+// First approx
+assigns \result \from *addr ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE uint8_t __LDREXB(volatile uint8_t *addr)
 {
     uint32_t result;
 
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)
+    /*@
+    // First approx
+    assigns result \from *addr ;
+    */
    __ASM volatile ("ldrexb %0, %1" : "=r" (result) : "Q" (*addr) );
 #else
     /* Prior to GCC 4.8, "Q" will be expanded to [rx, #0] which is not
        accepted by assembler. So has to use following less efficient pattern.
     */
+   /*@
+   // First approx
+   assigns result \from *addr ;
+   */
    __ASM volatile ("ldrexb %0, [%1]" : "=r" (result) : "r" (addr) : "memory" );
 #endif
    return ((uint8_t) result);    /* Add explicit type cast here */
@@ -584,16 +865,28 @@ __attribute__((always_inline)) __STATIC_INLINE uint8_t __LDREXB(volatile uint8_t
   \param [in]    ptr  Pointer to data
   \return        value of type uint16_t at (*ptr)
  */
+/*@
+// First approx
+assigns \result \from *addr ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE uint16_t __LDREXH(volatile uint16_t *addr)
 {
     uint32_t result;
 
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)
+    /*@
+    // First approx
+    assigns result \from *addr ;
+    */
    __ASM volatile ("ldrexh %0, %1" : "=r" (result) : "Q" (*addr) );
 #else
     /* Prior to GCC 4.8, "Q" will be expanded to [rx, #0] which is not
        accepted by assembler. So has to use following less efficient pattern.
     */
+   /*@
+   // First approx
+   assigns result \from *addr ;
+   */
    __ASM volatile ("ldrexh %0, [%1]" : "=r" (result) : "r" (addr) : "memory" );
 #endif
    return ((uint16_t) result);    /* Add explicit type cast here */
@@ -606,10 +899,17 @@ __attribute__((always_inline)) __STATIC_INLINE uint16_t __LDREXH(volatile uint16
   \param [in]    ptr  Pointer to data
   \return        value of type uint32_t at (*ptr)
  */
+/*@
+// First approx
+assigns \result \from *addr ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE uint32_t __LDREXW(volatile uint32_t *addr)
 {
     uint32_t result;
-
+    /*@
+    // First approx
+    assigns result \from *addr ;
+    */
    __ASM volatile ("ldrex %0, %1" : "=r" (result) : "Q" (*addr) );
    return(result);
 }
@@ -623,10 +923,19 @@ __attribute__((always_inline)) __STATIC_INLINE uint32_t __LDREXW(volatile uint32
   \return          0  Function succeeded
   \return          1  Function failed
  */
+/*@
+// First approx
+assigns *addr \from value;
+assigns \result \from \nothing ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE uint32_t __STREXB(uint8_t value, volatile uint8_t *addr)
 {
    uint32_t result;
-
+   /*@
+   // First approx
+   assigns *addr \from value;
+   assigns \result \from \nothing ;
+   */
    __ASM volatile ("strexb %0, %2, %1" : "=&r" (result), "=Q" (*addr) : "r" ((uint32_t)value) );
    return(result);
 }
@@ -640,10 +949,19 @@ __attribute__((always_inline)) __STATIC_INLINE uint32_t __STREXB(uint8_t value, 
   \return          0  Function succeeded
   \return          1  Function failed
  */
+/*@
+// First approx
+assigns *addr \from value;
+assigns \result \from \nothing ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE uint32_t __STREXH(uint16_t value, volatile uint16_t *addr)
 {
    uint32_t result;
-
+   /*@
+   // First approx
+   assigns *addr \from value;
+   assigns \result \from \nothing ;
+   */
    __ASM volatile ("strexh %0, %2, %1" : "=&r" (result), "=Q" (*addr) : "r" ((uint32_t)value) );
    return(result);
 }
@@ -657,10 +975,19 @@ __attribute__((always_inline)) __STATIC_INLINE uint32_t __STREXH(uint16_t value,
   \return          0  Function succeeded
   \return          1  Function failed
  */
+/*@
+// First approx
+assigns *addr \from value;
+assigns \result \from \nothing ;
+*/
 __attribute__((always_inline)) __STATIC_INLINE uint32_t __STREXW(uint32_t value, volatile uint32_t *addr)
 {
    uint32_t result;
-
+   /*@
+   // First approx
+   assigns *addr \from value;
+   assigns \result \from \nothing ;
+   */
    __ASM volatile ("strex %0, %2, %1" : "=&r" (result), "=Q" (*addr) : "r" (value) );
    return(result);
 }
@@ -670,11 +997,16 @@ __attribute__((always_inline)) __STATIC_INLINE uint32_t __STREXW(uint32_t value,
   \brief   Remove the exclusive lock
   \details Removes the exclusive lock which is created by LDREX.
  */
+/*@ assigns \nothing; */
 __attribute__((always_inline)) __STATIC_INLINE void __CLREX(void)
+#ifdef __FRAMAC__
+  ;
+#else
 {
+  /*@ assigns \nothing; */
   __ASM volatile ("clrex" ::: "memory");
 }
-
+#endif
 
 /**
   \brief   Signed Saturate
@@ -686,6 +1018,7 @@ __attribute__((always_inline)) __STATIC_INLINE void __CLREX(void)
 #define __SSAT(ARG1,ARG2) \
 ({                          \
   uint32_t __RES, __ARG1 = (ARG1); \
+  /*@ assigns __RES \from __ARG1, ARG2 */\
   __ASM ("ssat %0, %1, %2" : "=r" (__RES) :  "I" (ARG2), "r" (__ARG1) ); \
   __RES; \
  })
@@ -701,6 +1034,7 @@ __attribute__((always_inline)) __STATIC_INLINE void __CLREX(void)
 #define __USAT(ARG1,ARG2) \
 ({                          \
   uint32_t __RES, __ARG1 = (ARG1); \
+  /*@ assigns __RES \from __ARG1, ARG2 */				\
   __ASM ("usat %0, %1, %2" : "=r" (__RES) :  "I" (ARG2), "r" (__ARG1) ); \
   __RES; \
  })
@@ -713,10 +1047,11 @@ __attribute__((always_inline)) __STATIC_INLINE void __CLREX(void)
   \param [in]    value  Value to rotate
   \return               Rotated value
  */
+/*@ assigns \result \from value ; */
 __attribute__((always_inline)) __STATIC_INLINE uint32_t __RRX(uint32_t value)
 {
   uint32_t result;
-
+  /*@ assigns result \from value ; */
   __ASM volatile ("rrx %0, %1" : __CMSIS_GCC_OUT_REG (result) : __CMSIS_GCC_USE_REG (value) );
   return(result);
 }
@@ -728,16 +1063,19 @@ __attribute__((always_inline)) __STATIC_INLINE uint32_t __RRX(uint32_t value)
   \param [in]    ptr  Pointer to data
   \return             value of type uint8_t at (*ptr)
  */
+/*@ assigns \result \from *addr ; */
 __attribute__((always_inline)) __STATIC_INLINE uint8_t __LDRBT(volatile uint8_t *addr)
 {
     uint32_t result;
 
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)
+    /*@ assigns result \from *addr ; */
    __ASM volatile ("ldrbt %0, %1" : "=r" (result) : "Q" (*addr) );
 #else
     /* Prior to GCC 4.8, "Q" will be expanded to [rx, #0] which is not
        accepted by assembler. So has to use following less efficient pattern.
     */
+   /*@ assigns result \from *addr ; */
    __ASM volatile ("ldrbt %0, [%1]" : "=r" (result) : "r" (addr) : "memory" );
 #endif
    return ((uint8_t) result);    /* Add explicit type cast here */
@@ -750,16 +1088,19 @@ __attribute__((always_inline)) __STATIC_INLINE uint8_t __LDRBT(volatile uint8_t 
   \param [in]    ptr  Pointer to data
   \return        value of type uint16_t at (*ptr)
  */
+/*@ assigns \result \from *addr ; */
 __attribute__((always_inline)) __STATIC_INLINE uint16_t __LDRHT(volatile uint16_t *addr)
 {
     uint32_t result;
 
 #if (__GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8)
+    /*@ assigns \result \from *addr ; */
    __ASM volatile ("ldrht %0, %1" : "=r" (result) : "Q" (*addr) );
 #else
     /* Prior to GCC 4.8, "Q" will be expanded to [rx, #0] which is not
        accepted by assembler. So has to use following less efficient pattern.
     */
+   /*@ assigns \result \from *addr ; */
    __ASM volatile ("ldrht %0, [%1]" : "=r" (result) : "r" (addr) : "memory" );
 #endif
    return ((uint16_t) result);    /* Add explicit type cast here */
@@ -772,10 +1113,11 @@ __attribute__((always_inline)) __STATIC_INLINE uint16_t __LDRHT(volatile uint16_
   \param [in]    ptr  Pointer to data
   \return        value of type uint32_t at (*ptr)
  */
+/*@ assigns \result \from *addr ; */
 __attribute__((always_inline)) __STATIC_INLINE uint32_t __LDRT(volatile uint32_t *addr)
 {
     uint32_t result;
-
+    /*@ assigns \result \from *addr ; */
    __ASM volatile ("ldrt %0, %1" : "=r" (result) : "Q" (*addr) );
    return(result);
 }
@@ -787,8 +1129,10 @@ __attribute__((always_inline)) __STATIC_INLINE uint32_t __LDRT(volatile uint32_t
   \param [in]  value  Value to store
   \param [in]    ptr  Pointer to location
  */
+/*@ assigns *addr \from value ; */
 __attribute__((always_inline)) __STATIC_INLINE void __STRBT(uint8_t value, volatile uint8_t *addr)
 {
+  /*@ assigns *addr \from value ; */
    __ASM volatile ("strbt %1, %0" : "=Q" (*addr) : "r" ((uint32_t)value) );
 }
 
@@ -799,8 +1143,10 @@ __attribute__((always_inline)) __STATIC_INLINE void __STRBT(uint8_t value, volat
   \param [in]  value  Value to store
   \param [in]    ptr  Pointer to location
  */
+/*@ assigns *addr \from value ; */
 __attribute__((always_inline)) __STATIC_INLINE void __STRHT(uint16_t value, volatile uint16_t *addr)
 {
+  /*@ assigns *addr \from value ; */
    __ASM volatile ("strht %1, %0" : "=Q" (*addr) : "r" ((uint32_t)value) );
 }
 
@@ -811,8 +1157,10 @@ __attribute__((always_inline)) __STATIC_INLINE void __STRHT(uint16_t value, vola
   \param [in]  value  Value to store
   \param [in]    ptr  Pointer to location
  */
+/*@ assigns *addr \from value ; */
 __attribute__((always_inline)) __STATIC_INLINE void __STRT(uint32_t value, volatile uint32_t *addr)
 {
+  /*@ assigns *addr \from value ; */
    __ASM volatile ("strt %1, %0" : "=Q" (*addr) : "r" (value) );
 }
 
@@ -829,272 +1177,408 @@ __attribute__((always_inline)) __STATIC_INLINE void __STRT(uint32_t value, volat
 
 #if (__CORTEX_M >= 0x04U)  /* only for Cortex-M4 and above */
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SADD8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@ assigns result \from op1, op2 ; */
   __ASM volatile ("sadd8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __QADD8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@ assigns result \from op1, op2 ; */
   __ASM volatile ("qadd8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SHADD8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("shadd8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UADD8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("uadd8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UQADD8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("uqadd8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UHADD8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("uhadd8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SSUB8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("ssub8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __QSUB8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("qsub8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SHSUB8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("shsub8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __USUB8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("usub8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UQSUB8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("uqsub8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UHSUB8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@ assigns result \from op1, op2 ; */
   __ASM volatile ("uhsub8 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SADD16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("sadd16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __QADD16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("qadd16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SHADD16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("shadd16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UADD16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("uadd16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UQADD16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@   assigns result \from op1, op2 ; */
   __ASM volatile ("uqadd16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UHADD16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("uhadd16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SSUB16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("ssub16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __QSUB16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("qsub16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SHSUB16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("shsub16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __USUB16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("usub16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UQSUB16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("uqsub16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UHSUB16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("uhsub16 %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SASX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("sasx %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __QASX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("qasx %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SHASX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("shasx %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UASX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("uasx %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UQASX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("uqasx %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UHASX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("uhasx %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SSAX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("ssax %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __QSAX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("qsax %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \result \from op1, op2 ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SHSAX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
-
+  /*@  assigns result \from op1, op2 ; */
   __ASM volatile ("shsax %0, %1, %2" : "=r" (result) : "r" (op1), "r" (op2) );
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __USAX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1103,6 +1587,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __USAX(uint32_t op1,
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UQSAX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1111,6 +1599,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UQSAX(uint32_t op1
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UHSAX(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1119,6 +1611,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UHSAX(uint32_t op1
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __USAD8(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1127,6 +1623,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __USAD8(uint32_t op1
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __USADA8(uint32_t op1, uint32_t op2, uint32_t op3)
 {
   uint32_t result;
@@ -1149,6 +1649,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __USADA8(uint32_t op
   __RES; \
  })
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UXTB16(uint32_t op1)
 {
   uint32_t result;
@@ -1157,6 +1661,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UXTB16(uint32_t op
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UXTAB16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1165,6 +1673,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __UXTAB16(uint32_t o
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SXTB16(uint32_t op1)
 {
   uint32_t result;
@@ -1173,6 +1685,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SXTB16(uint32_t op
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SXTAB16(uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1181,6 +1697,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SXTAB16(uint32_t o
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMUAD  (uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1189,6 +1709,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMUAD  (uint32_t o
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMUADX (uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1197,6 +1721,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMUADX (uint32_t o
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMLAD (uint32_t op1, uint32_t op2, uint32_t op3)
 {
   uint32_t result;
@@ -1205,6 +1733,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMLAD (uint32_t op
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMLADX (uint32_t op1, uint32_t op2, uint32_t op3)
 {
   uint32_t result;
@@ -1213,6 +1745,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMLADX (uint32_t o
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint64_t __SMLALD (uint32_t op1, uint32_t op2, uint64_t acc)
 {
   union llreg_u{
@@ -1230,6 +1766,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint64_t __SMLALD (uint32_t o
   return(llr.w64);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint64_t __SMLALDX (uint32_t op1, uint32_t op2, uint64_t acc)
 {
   union llreg_u{
@@ -1247,6 +1787,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint64_t __SMLALDX (uint32_t 
   return(llr.w64);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMUSD  (uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1255,6 +1799,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMUSD  (uint32_t o
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMUSDX (uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1263,6 +1811,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMUSDX (uint32_t o
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMLSD (uint32_t op1, uint32_t op2, uint32_t op3)
 {
   uint32_t result;
@@ -1271,6 +1823,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMLSD (uint32_t op
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMLSDX (uint32_t op1, uint32_t op2, uint32_t op3)
 {
   uint32_t result;
@@ -1279,6 +1835,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMLSDX (uint32_t o
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint64_t __SMLSLD (uint32_t op1, uint32_t op2, uint64_t acc)
 {
   union llreg_u{
@@ -1296,6 +1856,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint64_t __SMLSLD (uint32_t o
   return(llr.w64);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint64_t __SMLSLDX (uint32_t op1, uint32_t op2, uint64_t acc)
 {
   union llreg_u{
@@ -1313,6 +1877,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint64_t __SMLSLDX (uint32_t 
   return(llr.w64);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SEL  (uint32_t op1, uint32_t op2)
 {
   uint32_t result;
@@ -1321,6 +1889,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SEL  (uint32_t op1
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE  int32_t __QADD( int32_t op1,  int32_t op2)
 {
   int32_t result;
@@ -1329,6 +1901,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE  int32_t __QADD( int32_t op1,
   return(result);
 }
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE  int32_t __QSUB( int32_t op1,  int32_t op2)
 {
   int32_t result;
@@ -1354,6 +1930,10 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE  int32_t __QSUB( int32_t op1,
   __RES; \
  })
 
+/*@
+  // First approx
+  assigns \nothing ;
+*/
 __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMMLA (int32_t op1, int32_t op2, int32_t op3)
 {
  int32_t result;

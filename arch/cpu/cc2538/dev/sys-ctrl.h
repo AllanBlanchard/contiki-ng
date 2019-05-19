@@ -62,6 +62,43 @@
 /** \name Definitions of Sys Ctrl registers
  * @{
  */
+#ifdef __FRAMAC__
+static uint32_t sys_ctrl_regs[32];
+
+#define SYS_CTRL_CLOCK_CTRL     (&sys_ctrl_regs[ 0])  /**< Clock control register */
+#define SYS_CTRL_CLOCK_STA      (&sys_ctrl_regs[ 1])  /**< Clock status register */
+#define SYS_CTRL_RCGCGPT        (&sys_ctrl_regs[ 2])  /**< GPT[3:0] clocks - active mode */
+#define SYS_CTRL_SCGCGPT        (&sys_ctrl_regs[ 3])  /**< GPT[3:0] clocks - sleep mode */
+#define SYS_CTRL_DCGCGPT        (&sys_ctrl_regs[ 4])  /**< GPT[3:0] clocks - PM0 */
+#define SYS_CTRL_SRGPT          (&sys_ctrl_regs[ 5])  /**< GPT[3:0] reset control */
+#define SYS_CTRL_RCGCSSI        (&sys_ctrl_regs[ 6])  /**< SSI[1:0] clocks - active mode */
+#define SYS_CTRL_SCGCSSI        (&sys_ctrl_regs[ 7])  /**< SSI[1:0] clocks - sleep mode */
+#define SYS_CTRL_DCGCSSI        (&sys_ctrl_regs[ 8])  /**< SSI[1:0] clocks - PM0 mode */
+#define SYS_CTRL_SRSSI          (&sys_ctrl_regs[ 9])  /**< SSI[1:0] reset control */
+#define SYS_CTRL_RCGCUART       (&sys_ctrl_regs[10])  /**< UART[1:0] clocks - active mode */
+#define SYS_CTRL_SCGCUART       (&sys_ctrl_regs[11])  /**< UART[1:0] clocks - sleep mode */
+#define SYS_CTRL_DCGCUART       (&sys_ctrl_regs[12])  /**< UART[1:0] clocks - PM0 */
+#define SYS_CTRL_SRUART         (&sys_ctrl_regs[13])  /**< UART[1:0] reset control */
+#define SYS_CTRL_RCGCI2C        (&sys_ctrl_regs[14])  /**< I2C clocks - active mode */
+#define SYS_CTRL_SCGCI2C        (&sys_ctrl_regs[15])  /**< I2C clocks - sleep mode */
+#define SYS_CTRL_DCGCI2C        (&sys_ctrl_regs[16])  /**< I2C clocks - PM0 */
+#define SYS_CTRL_SRI2C          (&sys_ctrl_regs[17])  /**< I2C clocks - reset control */
+#define SYS_CTRL_RCGCSEC        (&sys_ctrl_regs[18])  /**< Sec Mod clocks - active mode */
+#define SYS_CTRL_SCGCSEC        (&sys_ctrl_regs[19])  /**< Sec Mod clocks - sleep mode */
+#define SYS_CTRL_DCGCSEC        (&sys_ctrl_regs[20])  /**< Sec Mod clocks - PM0 */
+#define SYS_CTRL_SRSEC          (&sys_ctrl_regs[21])  /**< Sec Mod reset control */
+#define SYS_CTRL_PMCTL          (&sys_ctrl_regs[22])  /**< Power Mode Control */
+#define SYS_CTRL_SRCRC          (&sys_ctrl_regs[23])  /**< CRC on state retention */
+#define SYS_CTRL_PWRDBG         (&sys_ctrl_regs[24])  /**< Power debug register */
+#define SYS_CTRL_CLD            (&sys_ctrl_regs[25])  /**< clock loss detection feature */
+#define SYS_CTRL_IWE            (&sys_ctrl_regs[26])  /**< interrupt wake-up. */
+#define SYS_CTRL_I_MAP          (&sys_ctrl_regs[27])  /**< Interrupt map select */
+#define SYS_CTRL_RCGCRFC        (&sys_ctrl_regs[28])  /**< RF Core clocks - active mode */
+#define SYS_CTRL_SCGCRFC        (&sys_ctrl_regs[29])  /**< RF Core clocks - Sleep mode */
+#define SYS_CTRL_DCGCRFC        (&sys_ctrl_regs[30])  /**< RF Core clocks - PM0 */
+#define SYS_CTRL_EMUOVR         (&sys_ctrl_regs[31])  /**< Emulator override */
+
+#else
 #define SYS_CTRL_CLOCK_CTRL     0x400D2000  /**< Clock control register */
 #define SYS_CTRL_CLOCK_STA      0x400D2004  /**< Clock status register */
 #define SYS_CTRL_RCGCGPT        0x400D2008  /**< GPT[3:0] clocks - active mode */
@@ -94,6 +131,7 @@
 #define SYS_CTRL_SCGCRFC        0x400D20AC  /**< RF Core clocks - Sleep mode */
 #define SYS_CTRL_DCGCRFC        0x400D20B0  /**< RF Core clocks - PM0 */
 #define SYS_CTRL_EMUOVR         0x400D20B4  /**< Emulator override */
+#endif
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name SYS_CTRL_CLOCK_CTRL register bit masks
