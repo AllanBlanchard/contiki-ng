@@ -12,9 +12,11 @@ CPPFLAGS:= ${shell echo ${CPPFLAGS} | sed -r s/\"/'\\\\\\\"'/g}
 include files.mk
 
 ##############################################################
-MORERTE = -warn-signed-overflow -warn-signed-downcast
+#MORERTE = -warn-signed-overflow -warn-signed-downcast
 #MORERTE=-warn-unsigned-downcast -warn-unsigned-overflow
-MORERTE += -rte-div -rte-float-to-int -rte-mem -rte-pointer-call -rte-shift -rte-no-trivial-annotations
+#MORERTE += -rte-div -rte-float-to-int -rte-mem -rte-pointer-call -rte-shift -rte-no-trivial-annotations
+MORERTE=-warn-signed-overflow -warn-unsigned-overflow -warn-signed-downcast -warn-unsigned-downcast -rte-div -rte-float-to-int -rte-mem -rte-pointer-call -rte-shift -rte-no-trivial-annotations
+
 %.rte: SOURCES = $(SRCFILES)
 %.rte: PARSE = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
 %.rte:
@@ -44,11 +46,21 @@ $(TARGET).eacsl:
 	@echo $(EACSLCMD)
 
 ##############################################################
+FRAMACSHARE=$(shell frama-c -print-share-path)
+#EACSLVERBOSE=-DE_ACSL_DEBUG -DE_ACSL_DEBUG_VERBOSE
+EACSLCFLAGS=$(EACSLVERBOSE) -DE_ACSL_SEGMENT_MMODEL -DE_ACSL_STACK_SIZE=32 -DE_ACSL_HEAP_SIZE=128 -std=c99 -m64 $(CFLAGS) -fno-builtin -fno-merge-constants -Wall -Wno-long-long -Wno-attributes -Wno-nonnull -Wno-undef -Wno-unused -Wno-unused-function -Wno-unused-result -Wno-unused-value -Wno-unused-function -Wno-unused-variable -Wno-unused-but-set-variable -Wno-implicit-function-declaration -Wno-empty-body
+EACSLINCLUDES=-I$(FRAMACSHARE)/e-acsl/
+EACSLLIBS=$(FRAMACSHARE)/e-acsl/e_acsl_rtl.c $(FRAMACSHARE)/../../lib/libeacsl-dlmalloc.a $(FRAMACSHARE)/../../lib/libeacsl-gmp.a -lm
+
 FILTEREDSRCFILES=$(filter-out test-ringbufindex.c,$(SRCFILES))
+
 EACSLBLACKLISTFILES=Java_org_contikios_cooja_corecomm_Lib1_setReferenceAddress,Java_org_contikios_cooja_corecomm_Lib1_getMemory,Java_org_contikios_cooja_corecomm_Lib1_setMemory,Java_org_contikios_cooja_corecomm_Lib1_tick,doActionsBeforeTick,random_init
 EACSLBLACKLIST=-e-acsl-instrument $(EACSLBLACKLISTFILES) -e-acsl-functions $(EACSLBLACKLISTFILES)
+
+JAVA_INCLUDE=-I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/ # TODO : ubuntu / debian portable way ?
+
 %.total: SOURCES = $(FILTEREDSRCFILES)
-%.total: TOTALCMD = $(FRAMAC) -main initmain -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="-I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -fPIC -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -Werror $(CPPFLAGS)" $(SOURCES) -then -e-acsl $(EACSLBLACKLIST) $(FULLMMODEL) -then-last -print -ocode $@/framac.c
+%.total: TOTALCMD = $(FRAMAC) -main initmain -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="$(JAVA_INCLUDE) -fno-builtin-printf -fPIC -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -Werror $(CPPFLAGS)" $(SOURCES) -then -e-acsl $(EACSLBLACKLIST) $(FULLMMODEL) -then-last -print -ocode $@/framac.c
 
 total: $(TARGET).total
 
@@ -62,7 +74,7 @@ $(TARGET).total:
 parse: $(TARGET).parse
 
 %.parse: SOURCES = $(FILTEREDSRCFILES)
-%.parse: PARSE = $(FRAMAC) -main initmain -no-warn-invalid-bool $(FCCOMMONFLAGS) -cpp-extra-args="-I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -fPIC -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -Werror $(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
+%.parse: PARSE = $(FRAMAC) -main initmain -no-warn-invalid-bool $(FCCOMMONFLAGS) -cpp-extra-args="$(JAVA_INCLUDE) -fno-builtin-printf -fPIC -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -Werror $(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
 %.parse:
 	@mkdir -p $@
 	$(PARSE)
@@ -78,8 +90,8 @@ n: total
 	#sed -i -e '665,700{s/^/\/\//g}' $(TARGET).total/prepare_framac.c
 	sed -i -e '718,748{s/^/\/\//g}' $(TARGET).total/prepare_framac.c
 	#sed -i -e 's/typedef char int8_t;/typedef signed char int8_t;/g' $(TARGET).total/prepare_framac.c
-	gcc -fPIC -ffunction-sections -fdata-sections -DE_ACSL_SEGMENT_MMODEL -DE_ACSL_STACK_SIZE=32 -DE_ACSL_HEAP_SIZE=128 -std=c99 -m$(M) -g -O0 -fno-builtin -fno-merge-constants -Wno-attributes -DCONTIKI=1 -DCONTIKI_TARGET_COOJA=1 -DCONTIKI_TARGET_STRING=\"cooja\" -Wno-unused-const-variable -DPROJECT_CONF_PATH=\"project-conf.h\" -I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -DMAC_CONF_WITH_CSMA=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1  -I. -I../../../arch/platform/cooja/. -I../../../arch/platform/cooja/dev -I../../../arch/platform/cooja/lib -I../../../arch/platform/cooja/sys -I../../../arch/platform/cooja/cfs -I../../../arch/platform/cooja/net -I../../../arch -I../../../os/services/unit-test -I../../../os -I../../../os/sys -I../../../os/dev -I../../../os/lib -I../../../os/services -I../../../os -I../../../os/net -I../../../os/net/mac -I../../../os/net/mac/framer -I../../../os/net/routing -I../../../os/storage -I../../../os/net/mac/csma -I../../../os/net/ipv6 -I../../../os/net/routing/rpl-lite -I../../../arch/platform/cooja/ -I../../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-173-ge82159a-dirty\" -MMD -o $(RESULT).o -c $(TARGET).total/prepare_framac.c
-	gcc -fPIC -ffunction-sections -fdata-sections -DE_ACSL_SEGMENT_MMODEL -DE_ACSL_STACK_SIZE=32 -DE_ACSL_HEAP_SIZE=128 -std=c99 -m$(M) -g -O0 -fno-builtin -fno-merge-constants -Wno-attributes  -DCONTIKI=1 -DCONTIKI_TARGET_COOJA=1 -DCONTIKI_TARGET_STRING=\"cooja\" -Wno-unused-const-variable -DPROJECT_CONF_PATH=\"project-conf.h\" -I'/usr/lib/jvm/default-java/include' -I'/usr/lib/jvm/default-java/include/linux' -fno-builtin-printf -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -DMAC_CONF_WITH_CSMA=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1  -I. -I../../../arch/platform/cooja/. -I../../../arch/platform/cooja/dev -I../../../arch/platform/cooja/lib -I../../../arch/platform/cooja/sys -I../../../arch/platform/cooja/cfs -I../../../arch/platform/cooja/net -I../../../arch -I../../../os/services/unit-test -I../../../os -I../../../os/sys -I../../../os/dev -I../../../os/lib -I../../../os/services -I../../../os -I../../../os/net -I../../../os/net/mac -I../../../os/net/mac/framer -I../../../os/net/routing -I../../../os/storage -I../../../os/net/mac/csma -I../../../os/net/ipv6 -I../../../os/net/routing/rpl-lite -I../../../arch/platform/cooja/ -I../../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-173-ge82159a-dirty\" -MMD -o test-ringbufindex.o -c test-ringbufindex.c
+	gcc -fPIC -ffunction-sections -fdata-sections -DE_ACSL_SEGMENT_MMODEL -DE_ACSL_STACK_SIZE=32 -DE_ACSL_HEAP_SIZE=128 -std=c99 -m$(M) -g -O0 -fno-builtin -fno-merge-constants -Wno-attributes -DCONTIKI=1 -DCONTIKI_TARGET_COOJA=1 -DCONTIKI_TARGET_STRING=\"cooja\" -Wno-unused-const-variable -DPROJECT_CONF_PATH=\"project-conf.h\" $(JAVA_INCLUDE) -fno-builtin-printf -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -DMAC_CONF_WITH_CSMA=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1  -I. -I../../../arch/platform/cooja/. -I../../../arch/platform/cooja/dev -I../../../arch/platform/cooja/lib -I../../../arch/platform/cooja/sys -I../../../arch/platform/cooja/cfs -I../../../arch/platform/cooja/net -I../../../arch -I../../../os/services/unit-test -I../../../os -I../../../os/sys -I../../../os/dev -I../../../os/lib -I../../../os/services -I../../../os -I../../../os/net -I../../../os/net/mac -I../../../os/net/mac/framer -I../../../os/net/routing -I../../../os/storage -I../../../os/net/mac/csma -I../../../os/net/ipv6 -I../../../os/net/routing/rpl-lite -I../../../arch/platform/cooja/ -I../../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-173-ge82159a-dirty\" -MMD -o $(RESULT).o -c $(TARGET).total/prepare_framac.c
+	gcc -fPIC -ffunction-sections -fdata-sections -DE_ACSL_SEGMENT_MMODEL -DE_ACSL_STACK_SIZE=32 -DE_ACSL_HEAP_SIZE=128 -std=c99 -m$(M) -g -O0 -fno-builtin -fno-merge-constants -Wno-attributes  -DCONTIKI=1 -DCONTIKI_TARGET_COOJA=1 -DCONTIKI_TARGET_STRING=\"cooja\" -Wno-unused-const-variable -DPROJECT_CONF_PATH=\"project-conf.h\" $(JAVA_INCLUDE) -fno-builtin-printf -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -DMAC_CONF_WITH_CSMA=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1  -I. -I../../../arch/platform/cooja/. -I../../../arch/platform/cooja/dev -I../../../arch/platform/cooja/lib -I../../../arch/platform/cooja/sys -I../../../arch/platform/cooja/cfs -I../../../arch/platform/cooja/net -I../../../arch -I../../../os/services/unit-test -I../../../os -I../../../os/sys -I../../../os/dev -I../../../os/lib -I../../../os/services -I../../../os -I../../../os/net -I../../../os/net/mac -I../../../os/net/mac/framer -I../../../os/net/routing -I../../../os/storage -I../../../os/net/mac/csma -I../../../os/net/ipv6 -I../../../os/net/routing/rpl-lite -I../../../arch/platform/cooja/ -I../../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-173-ge82159a-dirty\" -MMD -o test-ringbufindex.o -c test-ringbufindex.c
 	mkdir -p build/cooja/
 	ar rcf build/cooja/$(LIBNAME).a $(RESULT).o
 	#mv platform.o build/cooja///$(LIBNAME).o
@@ -98,7 +110,7 @@ n: total
 	objcopy --redefine-sym putchar=log_putchar test-ringbufindex.o
 	objcopy --redefine-sym putchar=log_putchar $(RESULT).o
 	objcopy --redefine-sym putchar=log_putchar build/cooja/$(LIBNAME).a
-	gcc -fPIC -Wl,--gc-sections -ffunction-sections -fdata-sections -DE_ACSL_SEGMENT_MMODEL -DE_ACSL_STACK_SIZE=32 -DE_ACSL_HEAP_SIZE=128 -std=c99 -m$(M) -g -O0 -fno-builtin -fno-merge-constants -Wall -Wno-long-long -Wno-attributes -Wno-nonnull -Wno-undef -Wno-unused -Wno-unused-function -Wno-unused-result -Wno-unused-value -Wno-unused-function -Wno-unused-variable -Wno-unused-but-set-variable -Wno-implicit-function-declaration -Wno-empty-body -Wl,-Map=$(RESULT).map -I/home/jean/local-frama-c/bin/../share/frama-c/e-acsl/ -shared -o $(RESULT).cooja test-ringbufindex.o build/cooja/$(LIBNAME).a /home/jean/local-frama-c/bin/../share/frama-c/e-acsl//e_acsl_rtl.c /home/jean/local-frama-c/bin/../lib/libeacsl-dlmalloc.a /home/jean/local-frama-c/bin/../lib/libeacsl-gmp.a -lm
+	gcc -fPIC -Wl,--gc-sections -ffunction-sections -fdata-sections -DE_ACSL_SEGMENT_MMODEL -DE_ACSL_STACK_SIZE=32 -DE_ACSL_HEAP_SIZE=128 -std=c99 -m$(M) -g -O0 -fno-builtin -fno-merge-constants -Wall -Wno-long-long -Wno-attributes -Wno-nonnull -Wno-undef -Wno-unused -Wno-unused-function -Wno-unused-result -Wno-unused-value -Wno-unused-function -Wno-unused-variable -Wno-unused-but-set-variable -Wno-implicit-function-declaration -Wno-empty-body -Wl,-Map=$(RESULT).map $(EACSLINCLUDES) -shared -o $(RESULT).cooja test-ringbufindex.o build/cooja/$(LIBNAME).a $(EACSLLIBS)
 	cp $(RESULT).cooja test-ringbufindex.cooja
 	cp $(RESULT).map build/cooja/
 	cp test-ringbufindex.cooja build/cooja/$(LIBNAME).cooja
