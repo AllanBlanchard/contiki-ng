@@ -15,7 +15,7 @@ include files.mk
 #MORERTE = -warn-signed-overflow -warn-signed-downcast
 #MORERTE=-warn-unsigned-downcast -warn-unsigned-overflow
 #MORERTE += -rte-div -rte-float-to-int -rte-mem -rte-pointer-call -rte-shift -rte-no-trivial-annotations
-MORERTE=-warn-signed-overflow -warn-unsigned-overflow -warn-signed-downcast -warn-unsigned-downcast -rte-div -rte-float-to-int -rte-mem -rte-pointer-call -rte-shift -rte-no-trivial-annotations
+#MORERTE=-warn-signed-overflow -warn-signed-downcast -warn-unsigned-downcast -rte-div -rte-float-to-int -rte-mem -rte-pointer-call -rte-shift -rte-no-trivial-annotations
 
 %.rte: SOURCES = $(SRCFILES)
 %.rte: PARSE = $(FRAMAC) -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="$(CPPFLAGS)" $(SOURCES) -save $@/framac.save -print -ocode $@/framac.c -then -no-print
@@ -54,7 +54,8 @@ EACSLLIBS=$(FRAMACSHARE)/e-acsl/e_acsl_rtl.c $(FRAMACSHARE)/../../lib/libeacsl-d
 
 FILTEREDSRCFILES=$(filter-out test-ringbufindex.c,$(SRCFILES))
 
-EACSLBLACKLISTFILES=Java_org_contikios_cooja_corecomm_Lib1_setReferenceAddress,Java_org_contikios_cooja_corecomm_Lib1_getMemory,Java_org_contikios_cooja_corecomm_Lib1_setMemory,Java_org_contikios_cooja_corecomm_Lib1_tick,doActionsBeforeTick,random_init
+# Functions related to the JNI binding
+EACSLBLACKLISTFILES=+@all,-Java_org_contikios_cooja_corecomm_Lib1_init,-Java_org_contikios_cooja_corecomm_Lib1_setReferenceAddress,-Java_org_contikios_cooja_corecomm_Lib1_getMemory,-Java_org_contikios_cooja_corecomm_Lib1_setMemory,-Java_org_contikios_cooja_corecomm_Lib1_tick,-doActionsBeforeTick,-doActionsAfterTick,-doInterfaceActionsAfterTick,-doInterfaceActionsBeforeTick,-doInterfaceActionsAfterTick_0,-doInterfaceActionsBeforeTick_0,-doInterfaceActionsAfterTick_1,-doInterfaceActionsBeforeTick_1,-doInterfaceActionsAfterTick_2,-doInterfaceActionsBeforeTick_2,-doInterfaceActionsAfterTick_3,-doInterfaceActionsBeforeTick_3,-doInterfaceActionsAfterTick_4,-doInterfaceActionsBeforeTick_4,-doInterfaceActionsAfterTick_5,-doInterfaceActionsBeforeTick_5,-doInterfaceActionsAfterTick_6,-doInterfaceActionsBeforeTick_6,-doInterfaceActionsAfterTick_7,-doInterfaceActionsBeforeTick_7,-doInterfaceActionsAfterTick_8,-doInterfaceActionsBeforeTick_8,-doInterfaceActionsAfterTick_9,-doInterfaceActionsBeforeTick_9,-doInterfaceActionsAfterTick_10,-doInterfaceActionsBeforeTick_10,-doInterfaceActionsAfterTick_11,-doInterfaceActionsBeforeTick_11,-random_init
 EACSLBLACKLIST=-e-acsl-instrument $(EACSLBLACKLISTFILES) -e-acsl-functions $(EACSLBLACKLISTFILES)
 
 JAVA_INCLUDE=-I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/ # TODO : ubuntu / debian portable way ?
@@ -63,6 +64,9 @@ JAVA_INCLUDE=-I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/in
 %.total: TOTALCMD = $(FRAMAC) -main initmain -no-warn-invalid-bool $(FCCOMMONFLAGS) -e-acsl-prepare -rte $(MORERTE) -cpp-extra-args="$(JAVA_INCLUDE) -fno-builtin-printf -fPIC -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -Werror $(CPPFLAGS)" $(SOURCES) -then -e-acsl $(EACSLBLACKLIST) $(FULLMMODEL) -then-last -print -ocode $@/framac.c
 
 total: $(TARGET).total
+
+combine:
+	cat $(TARGET).total/framac.c $(CONTIKI)/prepare_memory.c $(CONTIKI)/jnimain.c > $(TARGET).total/prepare_framac.c
 
 $(TARGET).total:
 	@mkdir -p $@
@@ -86,9 +90,8 @@ LIBNAME ?= mtype$(N)
 n: RESULT=$(TARGET).total/$(LIBNAME)
 n: total
 	@echo $(LIBNAME)
-	cat $(TARGET).total/framac.c $(CONTIKI)/prepare_memory.c $(CONTIKI)/jnimain.c > $(TARGET).total/prepare_framac.c
+	$(CONTIKI)/prepare.sh $(CONTIKI) $(TARGET).total
 	#sed -i -e '665,700{s/^/\/\//g}' $(TARGET).total/prepare_framac.c
-	sed -i -e '718,748{s/^/\/\//g}' $(TARGET).total/prepare_framac.c
 	#sed -i -e 's/typedef char int8_t;/typedef signed char int8_t;/g' $(TARGET).total/prepare_framac.c
 	gcc -fPIC -ffunction-sections -fdata-sections -DE_ACSL_SEGMENT_MMODEL -DE_ACSL_STACK_SIZE=32 -DE_ACSL_HEAP_SIZE=128 -std=c99 -m$(M) -g -O0 -fno-builtin -fno-merge-constants -Wno-attributes -DCONTIKI=1 -DCONTIKI_TARGET_COOJA=1 -DCONTIKI_TARGET_STRING=\"cooja\" -Wno-unused-const-variable -DPROJECT_CONF_PATH=\"project-conf.h\" $(JAVA_INCLUDE) -fno-builtin-printf -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -DMAC_CONF_WITH_CSMA=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1  -I. -I../../../arch/platform/cooja/. -I../../../arch/platform/cooja/dev -I../../../arch/platform/cooja/lib -I../../../arch/platform/cooja/sys -I../../../arch/platform/cooja/cfs -I../../../arch/platform/cooja/net -I../../../arch -I../../../os/services/unit-test -I../../../os -I../../../os/sys -I../../../os/dev -I../../../os/lib -I../../../os/services -I../../../os -I../../../os/net -I../../../os/net/mac -I../../../os/net/mac/framer -I../../../os/net/routing -I../../../os/storage -I../../../os/net/mac/csma -I../../../os/net/ipv6 -I../../../os/net/routing/rpl-lite -I../../../arch/platform/cooja/ -I../../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-173-ge82159a-dirty\" -MMD -o $(RESULT).o -c $(TARGET).total/prepare_framac.c
 	gcc -fPIC -ffunction-sections -fdata-sections -DE_ACSL_SEGMENT_MMODEL -DE_ACSL_STACK_SIZE=32 -DE_ACSL_HEAP_SIZE=128 -std=c99 -m$(M) -g -O0 -fno-builtin -fno-merge-constants -Wno-attributes  -DCONTIKI=1 -DCONTIKI_TARGET_COOJA=1 -DCONTIKI_TARGET_STRING=\"cooja\" -Wno-unused-const-variable -DPROJECT_CONF_PATH=\"project-conf.h\" $(JAVA_INCLUDE) -fno-builtin-printf -Wall -g -I/usr/local/include -DCLASSNAME=Lib1 -DMAC_CONF_WITH_CSMA=1 -DNETSTACK_CONF_WITH_IPV6=1 -DROUTING_CONF_RPL_LITE=1  -I. -I../../../arch/platform/cooja/. -I../../../arch/platform/cooja/dev -I../../../arch/platform/cooja/lib -I../../../arch/platform/cooja/sys -I../../../arch/platform/cooja/cfs -I../../../arch/platform/cooja/net -I../../../arch -I../../../os/services/unit-test -I../../../os -I../../../os/sys -I../../../os/dev -I../../../os/lib -I../../../os/services -I../../../os -I../../../os/net -I../../../os/net/mac -I../../../os/net/mac/framer -I../../../os/net/routing -I../../../os/storage -I../../../os/net/mac/csma -I../../../os/net/ipv6 -I../../../os/net/routing/rpl-lite -I../../../arch/platform/cooja/ -I../../.. -DCONTIKI_VERSION_STRING=\"Contiki-NG-release/v4.2-173-ge82159a-dirty\" -MMD -o test-ringbufindex.o -c test-ringbufindex.c
